@@ -3,4 +3,4 @@ project(parser)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(parser main.cpp ParserConfig.cpp ParserConfig.hpp Server.cpp Server.hpp Location.cpp Location.hpp ConfigUtils.hpp)
+add_executable(parser main.cpp ParserConfig.cpp ParserConfig.hpp ConfigUtils.hpp)

@@ -5,16 +5,17 @@
 #ifndef PARSER_PARSERCONFIG_HPP
 #define PARSER_PARSERCONFIG_HPP
 
-#include "Server.hpp"
+#include "ConfigUtils.hpp"
+#include <fstream>
 
 class ParserConfig {
 private:
-    std::vector<Server *> servers;
+//    std::vector<Server *>   servers;
 
 public:
     ParserConfig(char *pathConfig);
 
-    const std::vector<Server *> &getServers() const;
+//    const std::vector<Server *> &getServers() const;
 };
 
 

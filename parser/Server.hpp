@@ -5,28 +5,23 @@
 #ifndef PARSER_SERVER_HPP
 #define PARSER_SERVER_HPP
 
-#include <iostream>
-#include <vector>
-#include <map>
-
-#include "Location.hpp"
 #include "ConfigUtils.hpp"
 
-class Server {
+class Server : public Location {
 private:
-//    std::string                         host;
-//    std::string                         root;
-    std::vector<std::string>            serverName;
-    t_listen                		    listens;
+    std::string                         host;
+    unsigned int                        port;
+    std::string                         serverNames;
+
     std::map<std::string, Location *>   location;
 public:
-    Server();
-
-    const std::vector<std::string> &getServerName() const;
-
-    const t_listen &getListens() const;
-
-    const std::map<std::string, Location *> &getLocation() const;
+//    Server();
+//
+//    const std::vector<std::string> &getServerName() const;
+//
+//    const t_listen &getListens() const;
+//
+//    const std::map<std::string, Location *> &getLocation() const;
 };
 
 

@@ -5,9 +5,14 @@
 #ifndef PARSER_CONFIGUTILS_HPP
 #define PARSER_CONFIGUTILS_HPP
 
-typedef struct	s_listen {
-    unsigned int	host;
-    unsigned int    port;
-}               t_listen;
+#include <iostream>
+#include <vector>
+#include <map>
+
+//#include "Location.hpp"
+//#include "Server.hpp"
+#include "ParserConfig.hpp"
+
+#define DEFAULT_CONFIG "/home/evelina/Desktop/webserv/configs/default.conf"
 
 #endif //PARSER_CONFIGUTILS_HPP
