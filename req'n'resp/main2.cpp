@@ -5,22 +5,65 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <fcntl.h>
+//#include <io.h>
 
 #define PORT 8080
+
+std::string get_file_data()
+{
+//	std::string out;
+	std::ifstream is ("test.jpg", std::ifstream::binary);
+	std::stringstream ss;
+	std::string out;
+	if (is) {
+		// get length of file:
+		is.seekg (0, is.end);
+		int length = is.tellg();
+		is.seekg (0, is.beg);
+		char *buffer = new char[length];
+		// read data as a block:
+		is.read (buffer,length);
+		int i = -1;
+		ss.write(buffer, length);
+		out = ss.str();
+		is.close();
+		// ...buffer contains the entire file...
+		delete[] buffer;
+	}
+	return (out);
+};
+
 int main(int argc, char const *argv[])
 {
     int server_fd, new_socket;
 	long valread;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
+	std::string file_str;
 
+	file_str = get_file_data();
     // Only this line has been changed. Everything is same.
-    std::string hello = "HTTP/1.1 200 OK\n\
-	Content-Type: text\n\
-	Content-Length: 12\n\n\
-	<html>Hello big world!\n\
-	<h>Header maybe zero</h>\
-	<h1>Header maybe one</h1>\
+
+	std::string file_size_str = std::to_string(file_str.length());
+
+	std::string hello = "HTTP/1.1 200 Okay\r\nContent-Type: image/png; Content-Transfer-Encoding: binary; Content-Length: " + file_size_str + ";charset=ISO-8859-4 \r\n\r\n" + file_str;
+
+
+   // std::string hello = "HTTP/1.1 200 OK\n\
+	Content-Type: image/jpg\n\
+	Content-Length: 242068\n\n\
+	<html> \
+	 <head> \
+	 <title>Ссылка</title> \
+	 </head> \
+	 <body> \
+	  <b>GHSFS<\b>\
+	  <img src=\"./test.jpg\" width=\"150\" \
+	  height=\"150\" alt=\"SAPLE\">\
+	 </body> \
 	</html>";
 
     // Creating socket file descriptor

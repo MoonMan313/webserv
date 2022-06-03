@@ -1,18 +1,16 @@
-#include "request.hpp"
 #include "response.hpp"
 
-std::map<std::string, std::string> get_headers(std::string headers_line, \
+std::map<std::string, std::string>	get_headers(std::string headers_line, \
 	Request *req)
 {
-	std::map<std::string, std::string> headers;
-	std::string key;
-	std::string value;
+	std::map<std::string, std::string>	headers;
+	std::string							key;
+	std::string							value;
 
-	int i = 0;
 	while(headers_line.compare("") != 0 && headers_line.compare("\n") != 0)
 	{
 		if (headers_line[headers_line.find(':') - 1]  == ' ' || \
-		isspace(headers_line[0]) || headers_line.find(':') == -1)
+		isspace(headers_line[0]) || headers_line.find(':') == std::string::npos)
 		{
 			req->setRespStatus(400);
 			break;
@@ -23,9 +21,6 @@ std::map<std::string, std::string> get_headers(std::string headers_line, \
 		trim_str(&value);
 		headers[key] = value;
 		headers_line.erase(0, end_of_line(headers_line) + 1);
-		//std::cout << "last part 1 of headers is X" << headers_line << "X" << std::endl;
-		if (i++ == 4) //temp counter
-			break;
 	}
 	return headers;
 }
@@ -43,27 +38,51 @@ void headers_parsing(std::string headers_line, Request *req)
 		return ;
 	}
 	req->setHeaders(get_headers(headers_line, req));
+	if (req->getHeaders()["Host"].find(':') != std::string::npos)
+	{
+		req->setPort(std::stoi((req->getHeaders()["Host"]). \
+			substr(req->getHeaders()["Host"].find(':') + 1)));
+	}
+}
+
+void parse_path(Request *req, std::string raw_line)
+{
+	// check fragment
+	if (raw_line.find('#') != std::string::npos)
+	{
+		req->setFragment(raw_line.substr(raw_line.find('#') + 1));
+		raw_line.erase(raw_line.find('#'));
+	}
+	// check query
+	if (raw_line.find('?') != std::string::npos)
+	{
+		req->setQuery(raw_line.substr(raw_line.find('?') + 1));
+		raw_line.erase(raw_line.find('?'));
+	}
+	// check path
+	if (!raw_line.empty())
+		req->setPath(raw_line);
 }
 
 //according to rfc normal request first line should be splitted by WS
-//in case of wrong encoding made by user agent WS could be present
+//i n case of wrong encoding made by user agent WS could be present
 //	inside of field of first f_line. Proper status should follow
-void first_line_parsing(std::string f_line, Request req)
+void first_line_parsing(std::string f_line, Request *req)
 {
 	std::stringstream temp;
 	std::string s;
 
 	temp << f_line;
 	getline(temp, s, ' ');
-	req.setMethod(s);
+	req->setMethod(s);
 	getline(temp, s, ' ');
-	req.setPath(s);
+	parse_path(req, s);
 	getline(temp, s, ' ');
-	req.setVersion(s);
+	req->setVersion(s);
 	temp >> s;
-	if (s.compare(req.getVersion()) != 0)
-		req.setRespStatus(400);
-};
+	if (s.compare(req->getVersion()) != 0)
+		req->setRespStatus(400);
+}
 
 std::string get_first_line(std::string req)
 {

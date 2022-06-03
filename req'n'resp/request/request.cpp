@@ -6,13 +6,14 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/05/10 18:18:46 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/06/01 18:25:44 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "request.hpp"
 
-Request::Request() : _resp_status(0){};
+Request::Request() :  _port(80), _resp_status(0), _method(""), \
+_path(""), _query("") {};
 
 Request::~Request(){};
 
@@ -36,12 +37,17 @@ std::string Request::getQuery() const
 	return (this->_query);
 };
 
+std::string Request::getFragment() const
+{
+	return (this->_fragment);
+};
+
 std::map<std::string, std::string> Request::getHeaders() const
 {
 	return (this->_headers);
 };
 
-std::string Request::getPort() const
+int Request::getPort() const
 {
 	return (this->_port);
 };
@@ -63,20 +69,29 @@ void Request::setVersion(std::string version)
 
 void Request::setPath(std::string path)
 {
+	percent_decoding(&path);
 	this->_path = path;
 };
 
 void Request::setQuery(std::string query)
 {
+	percent_decoding(&query);
 	this->_query = query;
 };
+
+void Request::setFragment(std::string fragment)
+{
+	percent_decoding(&fragment);
+	this->_fragment = fragment;
+};
+
 
 void Request::setHeaders(std::map<std::string, std::string> headers)
 {
 	this->_headers = headers;
 };
 
-void Request::setPort(std::string port)
+void Request::setPort(int port)
 {
 	this->_port = port;
 };
@@ -87,31 +102,22 @@ void Request::setRespStatus(int rest_status)
 	this->_resp_status = rest_status;
 };
 
-bool space_predicate(int a)
-{
-	if (std::isspace(a))
-		return true;
-	return (false);
-};
-
 void Request::parse_request(std::string req)
 {
-	//get first line
 	std::string first_line;
 
+	//get first line
 	first_line = get_first_line(req);
 	if (first_line.empty())
 	{
 		this->setRespStatus(400);
 		exit(EXIT_FAILURE);// develop here parsing stop procedure
 	}
-
 	//first line parsing
-	first_line_parsing(first_line, *this);
-	std::cout << this->getStatus() << "this is status" << std::endl;
+	first_line_parsing(first_line, this);
 	req.erase(0, first_line.length() + 1);
 	//get headers
 	headers_parsing(req, this);
 	//get message body
-	std::cout << this->getStatus() << " this is status" << std::endl;
-};
+	debug_val(this->getPath());
+	};
