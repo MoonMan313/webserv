@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
 
 	std::string file_size_str = std::to_string(file_str.length());
 
-	std::string hello = "HTTP/1.1 200 Okay\r\nContent-Type: image/png; Content-Transfer-Encoding: binary; Content-Length: " + file_size_str + ";charset=ISO-8859-4 \r\n\r\n" + file_str;
+	std::string hello = "HTTP/1.1 200 Okay\r\nContent-Transfer-Encoding: binary; Content-Length: " + file_size_str + ";charset=ISO-8859-4 \r\n\r\n" + file_str;
 
 
    // std::string hello = "HTTP/1.1 200 OK\n\

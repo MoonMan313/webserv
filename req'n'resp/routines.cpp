@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 13:14:30 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/06/01 15:51:49 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:50:10 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void percent_decoding(std::string *str)
 		(*str).insert((*str).find('%'), &incl, 1);
 		(*str).erase((*str).find('%'), 3);
 	}
-	debug_val(*str);
+	//debug_val(*str);
 };
 
 int end_of_line(std::string str)

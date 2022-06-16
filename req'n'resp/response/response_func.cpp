@@ -1,5 +1,12 @@
 #include "response.hpp"
 
+int is_file(std::string filename)
+{
+	if (filename.find(".") != std::string::npos)
+		return (1);
+	return (0);
+};
+
 std::string get_file_data(std::string filename)
 {
 //	std::string out;

@@ -6,14 +6,14 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/06/01 18:25:44 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:51:20 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "request.hpp"
 
-Request::Request() :  _port(80), _resp_status(0), _method(""), \
-_path(""), _query("") {};
+Request::Request() :  _port(80), _resp_status(200), _method(""), \
+_path(""), _body(""), _query("") {};
 
 Request::~Request(){};
 
@@ -52,11 +52,17 @@ int Request::getPort() const
 	return (this->_port);
 };
 
-int Request::getStatus() const
+int Request::getRespStatus() const
 {
 	return (this->_resp_status);
 };
 
+std::string Request::getBody() const
+{
+	return (this->_body);
+};
+
+//SETTERS
 void Request::setMethod(std::string method)
 {
 	this->_method = method;
@@ -96,28 +102,28 @@ void Request::setPort(int port)
 	this->_port = port;
 };
 
-
 void Request::setRespStatus(int rest_status)
 {
 	this->_resp_status = rest_status;
+};
+
+void Request::setBody(std::string body)
+{
+	this->_body = body;
 };
 
 void Request::parse_request(std::string req)
 {
 	std::string first_line;
 
+
 	//get first line
 	first_line = get_first_line(req);
-	if (first_line.empty())
-	{
-		this->setRespStatus(400);
-		exit(EXIT_FAILURE);// develop here parsing stop procedure
-	}
-	//first line parsing
+	//first line parsin
+	std::cout << "FL is :" << first_line << std::endl;
 	first_line_parsing(first_line, this);
+	if (this->_resp_status == 400) return;
 	req.erase(0, first_line.length() + 1);
 	//get headers
 	headers_parsing(req, this);
-	//get message body
-	debug_val(this->getPath());
 	};

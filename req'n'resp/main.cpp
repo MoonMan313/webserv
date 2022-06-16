@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:52:00 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/06/04 00:11:33 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:20:40 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,19 @@
 //#include "Location.hpp"
 #define PORT 8080
 
-void send_image(Response &resp)
+void send_image(void)
 {
+	Request req;
+	Response resp;
+	std::map<std::string, Location> locs;
+	Location lc1;
+	Location lc2;
+
+	lc1.root = "";
+	lc2.root = "temp";
+	locs["/"] = lc1;
+	locs["/path"] = lc2;
+
     int server_fd, new_socket;
 	//long valread;
     struct sockaddr_in address;
@@ -65,7 +76,12 @@ void send_image(Response &resp)
         char buffer[30000] = {0};
         read( new_socket , buffer, 30000);
 		std::string str = buffer;
-		std::cout << str << std::endl << str.substr(0, str.find("\n")) << std::endl;
+		//std::cout << str << std::endl << str.substr(0, str.find("\n")) << std::endl;
+		// implement here reading of requests from browser
+		req.parse_request(str);
+		//resp.path_assembling_n_heck(locs, req);
+		resp.make_response(locs, req);
+
         send(new_socket , resp.getRespons().c_str(), resp.getRespons().length(), MSG_DONTROUTE);
         printf("------------------Hello image sent-------------------");
 		usleep(100000);
@@ -75,26 +91,6 @@ void send_image(Response &resp)
 
 int main (void)
 {
-	std::string str;
-	Request req;
-	Response resp;
-	Location lc1;
-	Location lc2;
-//	Location lc2;
-	std::map<std::string, Location> locs;
-
-//	lc1 = Location();
-//	lc2 = Location();
-
-	str = "GET /test.jpg HTTP/1.1\nHost: localhost:8080\nContent-Info:ss\n\n";
-	std::cout << "location index is " << lc1.get_index() << std::endl;
-	req.parse_request(str);
-	lc1.root = "/";
-	lc2.root = "test_folder";
-	locs["/"] = lc1;
-	locs["path"] = lc2;
-	//resp.path_assembling_n_check(locs, req);
-	resp.make_response(locs, req);
-	send_image(resp);
+	send_image();
 	return (0);
 };

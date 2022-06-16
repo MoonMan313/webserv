@@ -28,7 +28,7 @@ public:
 
 	void path_assembling_n_check(std::map<std::string, Location> Locations, \
 		Request &req); // here link assembled ё
-//	with root locatiion from Config
+	//	with root locatiion from Config
 	// open question - if is a file of diff type
 	// open resourse which is not present on a server?
 
@@ -36,6 +36,8 @@ public:
 	void execute_get(Request &req);
 	void execute_post(Request &req);
 	void execute_delete(Request &req);
+
+	void make_err_resp(int resp_status);
 
 	//setters
 	void setRoot(std::string root);
@@ -46,5 +48,6 @@ public:
 };
 
 std::string get_file_data(std::string filename);
+int is_file(std::string filename);
 
 #endif

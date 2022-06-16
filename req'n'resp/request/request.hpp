@@ -6,7 +6,7 @@
 /*   By: dmitriyp <dmitriyp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 14:58:20 by dmitriyp          #+#    #+#             */
-/*   Updated: 2022/06/01 11:57:32 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:13:03 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ private:
 	std::string							_method;
 	std::string							_version;
 	std::string							_path;
+	std::string							_body;
 	std::string							_query;
 	std::string							_fragment;
 	std::string							_encoding;
@@ -36,9 +37,10 @@ public:
 	std::string							getPath() const;
 	std::string							getQuery() const;
 	std::string							getFragment() const;
+	std::string							getBody() const;
 	std::map<std::string, std::string>	getHeaders() const;
  	int									getPort() const;
-	int									getStatus() const;
+	int									getRespStatus() const;
 
 	void								setMethod(std::string method);
 	void								setVersion(std::string version);
@@ -49,6 +51,7 @@ public:
 	void								setPort(int port);
 	void								setRespStatus(int rest_status);
 	void								setFragment(std::string fragment);
+	void								setBody(std::string body);
 
 	void								parse_request(std::string req);
 };

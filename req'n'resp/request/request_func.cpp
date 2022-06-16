@@ -7,7 +7,8 @@ std::map<std::string, std::string>	get_headers(std::string headers_line, \
 	std::string							key;
 	std::string							value;
 
-	while(headers_line.compare("") != 0 && headers_line.compare("\n") != 0)
+	while(headers_line.compare("") != 0 && headers_line.compare("\r\n\r\n") \
+	!= 0 && headers_line[0] != '\r')
 	{
 		if (headers_line[headers_line.find(':') - 1]  == ' ' || \
 		isspace(headers_line[0]) || headers_line.find(':') == std::string::npos)
@@ -20,7 +21,13 @@ std::map<std::string, std::string>	get_headers(std::string headers_line, \
 			end_of_line(headers_line) - headers_line.find(':'));
 		trim_str(&value);
 		headers[key] = value;
+		//std::cout << key << " : " << value << std::endl;
 		headers_line.erase(0, end_of_line(headers_line) + 1);
+	}
+	if (headers.count("Content-Length") || headers.count("Transfer-Encoding"))
+	{
+		headers_line.erase(0, end_of_line(headers_line) + 1);
+		req->setBody(headers_line.substr(1));
 	}
 	return headers;
 }
@@ -64,24 +71,50 @@ void parse_path(Request *req, std::string raw_line)
 		req->setPath(raw_line);
 }
 
+void check_fl_values(Request *req)
+{
+	std::string check_methods;
+
+	check_methods = "GET_POST_DELETE_HEAD_PUT_CONNECT_OPTIONS_TRACE";
+	//check if method is proper
+	if (check_methods.find(req->getMethod()) == std::string::npos)
+	{
+		req->setRespStatus(400);
+		return ;
+	}
+	//HTTP-name "/" DIGIT "." DIGIT
+	if (req->getVersion().find("HTTP/") == std::string::npos)
+		req->setRespStatus(400);
+	else if (req->getVersion().length() != 8)
+		req->setRespStatus(400);
+	else if (req->getVersion().find(".") != 6)
+		req->setRespStatus(400);
+	else if (!isdigit(req->getVersion()[5]) || !isdigit(req->getVersion()[7]))
+		req->setRespStatus(400);
+};
+
 //according to rfc normal request first line should be splitted by WS
-//i n case of wrong encoding made by user agent WS could be present
-//	inside of field of first f_line. Proper status should follow
+//in case of wrong encoding made by user agent WS could be present
+//inside of field of first f_line. Proper status should follow
 void first_line_parsing(std::string f_line, Request *req)
 {
 	std::stringstream temp;
 	std::string s;
 
+	req->setRespStatus(400);
 	temp << f_line;
 	getline(temp, s, ' ');
 	req->setMethod(s);
+	if (temp.eof()) return;
 	getline(temp, s, ' ');
+	if (temp.eof()) return;
 	parse_path(req, s);
-	getline(temp, s, ' ');
+	getline(temp, s, '\r');
 	req->setVersion(s);
-	temp >> s;
-	if (s.compare(req->getVersion()) != 0)
-		req->setRespStatus(400);
+	getline(temp, s);
+	if (!(s.length() == 0)) return;
+	req->setRespStatus(200);
+	check_fl_values(req);
 }
 
 std::string get_first_line(std::string req)
@@ -89,6 +122,7 @@ std::string get_first_line(std::string req)
 	std::string first_line;
 	int pos;
 
+	//status line end shall be CRLF = /r/n (check w readl web request)
 	pos = req.find('\n');
 	if (pos == -1)
 		pos = req.length();
