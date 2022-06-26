@@ -1,8 +1,7 @@
 CMakeFiles/parser.dir/Server.cpp.o: \
- /home/evelina/Desktop/webserv/parser/Server.cpp \
+ /home/evelina/Desktop/webserver/parser/Server.cpp \
  /usr/include/stdc-predef.h \
- /home/evelina/Desktop/webserv/parser/Server.hpp \
- /home/evelina/Desktop/webserv/parser/ConfigUtils.hpp \
+ /home/evelina/Desktop/webserver/parser/Server.hpp \
  /usr/include/c++/9/iostream \
  /usr/include/x86_64-linux-gnu/c++/9/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/9/bits/os_defines.h \
@@ -110,7 +109,8 @@ CMakeFiles/parser.dir/Server.cpp.o: \
  /usr/include/c++/9/map /usr/include/c++/9/bits/stl_tree.h \
  /usr/include/c++/9/bits/stl_map.h /usr/include/c++/9/bits/stl_multimap.h \
  /usr/include/c++/9/bits/erase_if.h \
- /home/evelina/Desktop/webserv/parser/ParserConfig.hpp \
+ /home/evelina/Desktop/webserver/parser/Location.hpp \
+ /home/evelina/Desktop/webserver/parser/ParserConfig.hpp \
  /usr/include/c++/9/fstream /usr/include/c++/9/bits/codecvt.h \
  /usr/include/c++/9/cstdio /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \

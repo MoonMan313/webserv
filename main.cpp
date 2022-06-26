@@ -1,8 +1,8 @@
-#include "Server.hpp"
+#include "WebServer.hpp"
 
 int main()
 {
-    Server test;
+    Webserver test;
 
     test.setup();
     test.connect();

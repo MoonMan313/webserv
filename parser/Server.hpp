@@ -5,17 +5,45 @@
 #ifndef PARSER_SERVER_HPP
 #define PARSER_SERVER_HPP
 
-#include "ConfigUtils.hpp"
+#include <iostream>
+#include <vector>
+#include <map>
+
+#include "Location.hpp"
+//#include "Server.hpp"
+#include "ParserConfig.hpp"
+
+//#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default.conf"
+
+//class   Location;
 
 class Server : public Location {
-private:
-    std::string                         host;
-    unsigned int                        port;
-    std::string                         serverNames;
+protected:
+    std::string host;
+    unsigned int port;
+    std::string serverNames;
 
-    std::map<std::string, Location *>   location;
+    std::map<std::string, Location *> location;
 public:
-//    Server();
+    const std::map<std::string, Location *> &getLocation() const;
+
+public:
+    Server();
+
+    const std::string &getHost() const;
+
+    unsigned int getPort() const;
+
+    const std::string &getServerNames() const;
+    void setHost(const std::string &host);
+
+    void setPort(unsigned int port);
+
+    void setServerNames(const std::string &serverNames);
+
+    void setLocation(const std::map<std::string, Location *> &location);
+
+
 //
 //    const std::vector<std::string> &getServerName() const;
 //

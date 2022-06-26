@@ -9,10 +9,10 @@
 #include <vector>
 #include <map>
 
-//#include "Location.hpp"
-//#include "Server.hpp"
+#include "Location.hpp"
+#include "Server.hpp"
 #include "ParserConfig.hpp"
 
-#define DEFAULT_CONFIG "/home/evelina/Desktop/webserv/configs/default.conf"
+#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default.conf"
 
 #endif //PARSER_CONFIGUTILS_HPP

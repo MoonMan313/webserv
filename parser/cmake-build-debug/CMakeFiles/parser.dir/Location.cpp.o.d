@@ -1,8 +1,7 @@
 CMakeFiles/parser.dir/Location.cpp.o: \
- /home/evelina/Desktop/webserv/parser/Location.cpp \
+ /home/evelina/Desktop/webserver/parser/Location.cpp \
  /usr/include/stdc-predef.h \
- /home/evelina/Desktop/webserv/parser/Location.hpp \
- /home/evelina/Desktop/webserv/parser/ConfigUtils.hpp \
+ /home/evelina/Desktop/webserver/parser/Location.hpp \
  /usr/include/c++/9/iostream \
  /usr/include/x86_64-linux-gnu/c++/9/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/9/bits/os_defines.h \
@@ -109,20 +108,4 @@ CMakeFiles/parser.dir/Location.cpp.o: \
  /usr/include/c++/9/bits/stl_bvector.h /usr/include/c++/9/bits/vector.tcc \
  /usr/include/c++/9/map /usr/include/c++/9/bits/stl_tree.h \
  /usr/include/c++/9/bits/stl_map.h /usr/include/c++/9/bits/stl_multimap.h \
- /usr/include/c++/9/bits/erase_if.h \
- /home/evelina/Desktop/webserv/parser/ParserConfig.hpp \
- /usr/include/c++/9/fstream /usr/include/c++/9/bits/codecvt.h \
- /usr/include/c++/9/cstdio /usr/include/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
- /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
- /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
- /usr/include/x86_64-linux-gnu/c++/9/bits/basic_file.h \
- /usr/include/x86_64-linux-gnu/c++/9/bits/c++io.h \
- /usr/include/c++/9/bits/fstream.tcc /usr/include/c++/9/cerrno \
- /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
- /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
- /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /usr/include/x86_64-linux-gnu/bits/types/error_t.h
+ /usr/include/c++/9/bits/erase_if.h

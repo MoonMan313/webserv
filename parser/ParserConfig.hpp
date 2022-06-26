@@ -5,12 +5,21 @@
 #ifndef PARSER_PARSERCONFIG_HPP
 #define PARSER_PARSERCONFIG_HPP
 
-#include "ConfigUtils.hpp"
+#include <iostream>
+#include <vector>
+#include <map>
+
+//#include "Location.hpp"
+#include "Server.hpp"
+
+#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default.conf"
 #include <fstream>
+
+class   Server;
 
 class ParserConfig {
 private:
-//    std::vector<Server *>   servers;
+    std::vector<Server *>   servers;
 
 public:
     ParserConfig(char *pathConfig);

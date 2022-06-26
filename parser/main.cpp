@@ -7,12 +7,6 @@ int main(int argc, char **argv) {
         std::cout << "Enter one configuration file." << std::endl;
         return 0;
     }
-    try{
-        ParserConfig config(argv[1]);
-
-    }
-    catch (const char *text_error){
-        std::cout << text_error << std::endl;
-    }
+    ParserConfig config(argv[1]);
     return 0;
 }

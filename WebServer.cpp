@@ -1,20 +1,4 @@
-//
-// Created by Cheryle Dionna on 04/05/2022.
-//
-
-#include "Server.hpp"
-
-//парсер параметров server до "}"
-
-
-// const std::vector<std::string> &Server::getServerName() const {
-//     return serverName;
-// }
-
-
-// const std::map<std::string, Location *> &Server::getLocation() const {
-//     return location;
-// }
+#include "WebServer.hpp"
 
 void    Server::setAddr()
 {
@@ -155,10 +139,9 @@ void    Server::connect()
     }
     
 
-
 }
 
-void    Server::close_fds()
+void    WebServer::close_fds()
 {
     close(this->_fd);
     close(this->_max_fd);

@@ -1,6 +1,6 @@
 CMakeFiles/parser.dir/main.cpp.o: \
- /home/evelina/Desktop/webserv/parser/main.cpp /usr/include/stdc-predef.h \
- /usr/include/c++/9/iostream \
+ /home/evelina/Desktop/webserver/parser/main.cpp \
+ /usr/include/stdc-predef.h /usr/include/c++/9/iostream \
  /usr/include/x86_64-linux-gnu/c++/9/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/9/bits/os_defines.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -100,7 +100,7 @@ CMakeFiles/parser.dir/main.cpp.o: \
  /usr/include/c++/9/bits/basic_ios.tcc \
  /usr/include/c++/9/bits/ostream.tcc /usr/include/c++/9/istream \
  /usr/include/c++/9/bits/istream.tcc \
- /home/evelina/Desktop/webserv/parser/ConfigUtils.hpp \
+ /home/evelina/Desktop/webserver/parser/ConfigUtils.hpp \
  /usr/include/c++/9/vector /usr/include/c++/9/bits/stl_construct.h \
  /usr/include/c++/9/bits/stl_uninitialized.h \
  /usr/include/c++/9/bits/stl_vector.h \
@@ -108,7 +108,9 @@ CMakeFiles/parser.dir/main.cpp.o: \
  /usr/include/c++/9/map /usr/include/c++/9/bits/stl_tree.h \
  /usr/include/c++/9/bits/stl_map.h /usr/include/c++/9/bits/stl_multimap.h \
  /usr/include/c++/9/bits/erase_if.h \
- /home/evelina/Desktop/webserv/parser/ParserConfig.hpp \
+ /home/evelina/Desktop/webserver/parser/Location.hpp \
+ /home/evelina/Desktop/webserver/parser/Server.hpp \
+ /home/evelina/Desktop/webserver/parser/ParserConfig.hpp \
  /usr/include/c++/9/fstream /usr/include/c++/9/bits/codecvt.h \
  /usr/include/c++/9/cstdio /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \

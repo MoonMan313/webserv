@@ -44,19 +44,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/190/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /snap/clion/198/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/190/bin/cmake/linux/bin/cmake -E rm -f
+RM = /snap/clion/198/bin/cmake/linux/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/evelina/Desktop/webserv/parser
+CMAKE_SOURCE_DIR = /home/evelina/Desktop/webserver/parser
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/evelina/Desktop/webserv/parser/cmake-build-debug
+CMAKE_BINARY_DIR = /home/evelina/Desktop/webserver/parser/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/parser.dir/depend.make
@@ -72,44 +72,76 @@ include CMakeFiles/parser.dir/flags.make
 CMakeFiles/parser.dir/main.cpp.o: CMakeFiles/parser.dir/flags.make
 CMakeFiles/parser.dir/main.cpp.o: ../main.cpp
 CMakeFiles/parser.dir/main.cpp.o: CMakeFiles/parser.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evelina/Desktop/webserv/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/parser.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/parser.dir/main.cpp.o -MF CMakeFiles/parser.dir/main.cpp.o.d -o CMakeFiles/parser.dir/main.cpp.o -c /home/evelina/Desktop/webserv/parser/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evelina/Desktop/webserver/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/parser.dir/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/parser.dir/main.cpp.o -MF CMakeFiles/parser.dir/main.cpp.o.d -o CMakeFiles/parser.dir/main.cpp.o -c /home/evelina/Desktop/webserver/parser/main.cpp
 
 CMakeFiles/parser.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/parser.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/evelina/Desktop/webserv/parser/main.cpp > CMakeFiles/parser.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/evelina/Desktop/webserver/parser/main.cpp > CMakeFiles/parser.dir/main.cpp.i
 
 CMakeFiles/parser.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/parser.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/evelina/Desktop/webserv/parser/main.cpp -o CMakeFiles/parser.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/evelina/Desktop/webserver/parser/main.cpp -o CMakeFiles/parser.dir/main.cpp.s
 
 CMakeFiles/parser.dir/ParserConfig.cpp.o: CMakeFiles/parser.dir/flags.make
 CMakeFiles/parser.dir/ParserConfig.cpp.o: ../ParserConfig.cpp
 CMakeFiles/parser.dir/ParserConfig.cpp.o: CMakeFiles/parser.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evelina/Desktop/webserv/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/parser.dir/ParserConfig.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/parser.dir/ParserConfig.cpp.o -MF CMakeFiles/parser.dir/ParserConfig.cpp.o.d -o CMakeFiles/parser.dir/ParserConfig.cpp.o -c /home/evelina/Desktop/webserv/parser/ParserConfig.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evelina/Desktop/webserver/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/parser.dir/ParserConfig.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/parser.dir/ParserConfig.cpp.o -MF CMakeFiles/parser.dir/ParserConfig.cpp.o.d -o CMakeFiles/parser.dir/ParserConfig.cpp.o -c /home/evelina/Desktop/webserver/parser/ParserConfig.cpp
 
 CMakeFiles/parser.dir/ParserConfig.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/parser.dir/ParserConfig.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/evelina/Desktop/webserv/parser/ParserConfig.cpp > CMakeFiles/parser.dir/ParserConfig.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/evelina/Desktop/webserver/parser/ParserConfig.cpp > CMakeFiles/parser.dir/ParserConfig.cpp.i
 
 CMakeFiles/parser.dir/ParserConfig.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/parser.dir/ParserConfig.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/evelina/Desktop/webserv/parser/ParserConfig.cpp -o CMakeFiles/parser.dir/ParserConfig.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/evelina/Desktop/webserver/parser/ParserConfig.cpp -o CMakeFiles/parser.dir/ParserConfig.cpp.s
+
+CMakeFiles/parser.dir/Server.cpp.o: CMakeFiles/parser.dir/flags.make
+CMakeFiles/parser.dir/Server.cpp.o: ../Server.cpp
+CMakeFiles/parser.dir/Server.cpp.o: CMakeFiles/parser.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evelina/Desktop/webserver/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/parser.dir/Server.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/parser.dir/Server.cpp.o -MF CMakeFiles/parser.dir/Server.cpp.o.d -o CMakeFiles/parser.dir/Server.cpp.o -c /home/evelina/Desktop/webserver/parser/Server.cpp
+
+CMakeFiles/parser.dir/Server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/parser.dir/Server.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/evelina/Desktop/webserver/parser/Server.cpp > CMakeFiles/parser.dir/Server.cpp.i
+
+CMakeFiles/parser.dir/Server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/parser.dir/Server.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/evelina/Desktop/webserver/parser/Server.cpp -o CMakeFiles/parser.dir/Server.cpp.s
+
+CMakeFiles/parser.dir/Location.cpp.o: CMakeFiles/parser.dir/flags.make
+CMakeFiles/parser.dir/Location.cpp.o: ../Location.cpp
+CMakeFiles/parser.dir/Location.cpp.o: CMakeFiles/parser.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evelina/Desktop/webserver/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/parser.dir/Location.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/parser.dir/Location.cpp.o -MF CMakeFiles/parser.dir/Location.cpp.o.d -o CMakeFiles/parser.dir/Location.cpp.o -c /home/evelina/Desktop/webserver/parser/Location.cpp
+
+CMakeFiles/parser.dir/Location.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/parser.dir/Location.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/evelina/Desktop/webserver/parser/Location.cpp > CMakeFiles/parser.dir/Location.cpp.i
+
+CMakeFiles/parser.dir/Location.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/parser.dir/Location.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/evelina/Desktop/webserver/parser/Location.cpp -o CMakeFiles/parser.dir/Location.cpp.s
 
 # Object files for target parser
 parser_OBJECTS = \
 "CMakeFiles/parser.dir/main.cpp.o" \
-"CMakeFiles/parser.dir/ParserConfig.cpp.o"
+"CMakeFiles/parser.dir/ParserConfig.cpp.o" \
+"CMakeFiles/parser.dir/Server.cpp.o" \
+"CMakeFiles/parser.dir/Location.cpp.o"
 
 # External object files for target parser
 parser_EXTERNAL_OBJECTS =
 
 parser: CMakeFiles/parser.dir/main.cpp.o
 parser: CMakeFiles/parser.dir/ParserConfig.cpp.o
+parser: CMakeFiles/parser.dir/Server.cpp.o
+parser: CMakeFiles/parser.dir/Location.cpp.o
 parser: CMakeFiles/parser.dir/build.make
 parser: CMakeFiles/parser.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/evelina/Desktop/webserv/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable parser"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/evelina/Desktop/webserver/parser/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable parser"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/parser.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -121,6 +153,6 @@ CMakeFiles/parser.dir/clean:
 .PHONY : CMakeFiles/parser.dir/clean
 
 CMakeFiles/parser.dir/depend:
-	cd /home/evelina/Desktop/webserv/parser/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/evelina/Desktop/webserv/parser /home/evelina/Desktop/webserv/parser /home/evelina/Desktop/webserv/parser/cmake-build-debug /home/evelina/Desktop/webserv/parser/cmake-build-debug /home/evelina/Desktop/webserv/parser/cmake-build-debug/CMakeFiles/parser.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/evelina/Desktop/webserver/parser/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/evelina/Desktop/webserver/parser /home/evelina/Desktop/webserver/parser /home/evelina/Desktop/webserver/parser/cmake-build-debug /home/evelina/Desktop/webserver/parser/cmake-build-debug /home/evelina/Desktop/webserver/parser/cmake-build-debug/CMakeFiles/parser.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/parser.dir/depend
 

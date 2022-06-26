@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/evelina/Desktop/webserv/parser/cmake-build-debug"
+			"value" : "/home/evelina/Desktop/webserver/parser/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -155,7 +155,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/snap/clion/190/bin/cmake/linux/bin/cmake"
+			"value" : "/snap/clion/198/bin/cmake/linux/bin/cmake"
 		},
 		{
 			"name" : "CMAKE_CPACK_COMMAND",
@@ -167,7 +167,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/snap/clion/190/bin/cmake/linux/bin/cpack"
+			"value" : "/snap/clion/198/bin/cmake/linux/bin/cpack"
 		},
 		{
 			"name" : "CMAKE_CTEST_COMMAND",
@@ -179,7 +179,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/snap/clion/190/bin/cmake/linux/bin/ctest"
+			"value" : "/snap/clion/198/bin/cmake/linux/bin/ctest"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER",
@@ -679,7 +679,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/evelina/Desktop/webserv/parser"
+			"value" : "/home/evelina/Desktop/webserver/parser"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -967,7 +967,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/snap/clion/190/bin/cmake/linux/share/cmake-3.22"
+			"value" : "/snap/clion/198/bin/cmake/linux/share/cmake-3.22"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1247,7 +1247,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/evelina/Desktop/webserv/parser/cmake-build-debug"
+			"value" : "/home/evelina/Desktop/webserver/parser/cmake-build-debug"
 		},
 		{
 			"name" : "parser_IS_TOP_LEVEL",
@@ -1271,7 +1271,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/evelina/Desktop/webserv/parser"
+			"value" : "/home/evelina/Desktop/webserver/parser"
 		}
 	],
 	"kind" : "cache",

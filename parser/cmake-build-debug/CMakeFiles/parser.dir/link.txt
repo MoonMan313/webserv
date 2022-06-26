@@ -1,1 +1,1 @@
-/usr/bin/c++ -g CMakeFiles/parser.dir/main.cpp.o CMakeFiles/parser.dir/ParserConfig.cpp.o -o parser 
+/usr/bin/c++ -g CMakeFiles/parser.dir/main.cpp.o CMakeFiles/parser.dir/ParserConfig.cpp.o CMakeFiles/parser.dir/Server.cpp.o CMakeFiles/parser.dir/Location.cpp.o -o parser 
