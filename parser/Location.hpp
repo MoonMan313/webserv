@@ -13,7 +13,7 @@
 //#include "Server.hpp"
 //#include "ParserConfig.hpp"
 //
-//#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default.conf"
+//#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default1.conf"
 
 class Location {
 protected:
@@ -25,6 +25,7 @@ protected:
     std::string                 root;
     unsigned int                limitBodySize;
     std::map<int, std::string>  errorPage;
+
 public:
     void setMethodsAllowed(const std::string &methodsAllowed);
 
@@ -56,7 +57,7 @@ public:
 
     unsigned int getLimitBodySize() const;
 
-    const std::map<int, std::string> &getErrorPage() const;
+    void getErrorPage() const;
 
 public:
     Location();

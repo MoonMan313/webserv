@@ -37,8 +37,11 @@ unsigned int Location::getLimitBodySize() const {
     return limitBodySize;
 }
 
-const std::map<int, std::string> &Location::getErrorPage() const {
-    return errorPage;
+void Location::getErrorPage() const {
+    std::map <int, std::string>::const_iterator it = errorPage.begin();
+    for (; it != errorPage.end(); it++) {
+        std::cout << it->first << " " << it->second << std::endl;
+    }
 }
 
 void Location::setMethodsAllowed(const std::string &methodsAllowed) {

@@ -13,7 +13,7 @@
 //#include "Server.hpp"
 #include "ParserConfig.hpp"
 
-//#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default.conf"
+//#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default1.conf"
 
 //class   Location;
 
