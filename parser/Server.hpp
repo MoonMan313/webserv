@@ -25,9 +25,8 @@ protected:
 
     std::map<std::string, Location *> location;
 public:
-    const std::map<std::string, Location *> &getLocation() const;
+    Location *getLocation(char *path) ;
 
-public:
     Server();
 
     const std::string &getHost() const;
@@ -41,7 +40,7 @@ public:
 
     void setServerNames(const std::string &serverNames);
 
-    void setLocation(const std::map<std::string, Location *> &location);
+    void setLocation(char *first, Location *second);
 
 
 //

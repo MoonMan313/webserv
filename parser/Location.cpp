@@ -9,20 +9,12 @@ Location::Location() {
 
 }
 
-const std::string &Location::getMethodsAllowed() const {
-    return methodsAllowed;
-}
-
 bool Location::isAutoindex() const {
     return autoindex;
 }
 
 const std::string &Location::getIndex() const {
     return index;
-}
-
-const std::vector<std::string> &Location::getCgi() const {
-    return cgi;
 }
 
 const std::string &Location::getRedirection() const {
@@ -44,9 +36,6 @@ void Location::getErrorPage() const {
     }
 }
 
-void Location::setMethodsAllowed(const std::string &methodsAllowed) {
-    Location::methodsAllowed = methodsAllowed;
-}
 
 void Location::setAutoindex(bool autoindex) {
     Location::autoindex = autoindex;
@@ -54,10 +43,6 @@ void Location::setAutoindex(bool autoindex) {
 
 void Location::setIndex(const std::string &index) {
     Location::index = index;
-}
-
-void Location::setCgi(const std::vector<std::string> &cgi) {
-    Location::cgi = cgi;
 }
 
 void Location::setRedirection(const std::string &redirection) {
@@ -74,4 +59,22 @@ void Location::setLimitBodySize(unsigned int limitBodySize) {
 
 void Location::setErrorPage(char *first, char *second) {
     Location::errorPage[atoi(first)] = second;
+}
+
+const std::string &Location::getCgi() const {
+    return cgi;
+}
+
+void Location::setCgi(const std::string &cgi) {
+    Location::cgi = cgi;
+}
+
+void Location::setMethodsAllowed(const std::string &method) {
+    methodsAllowed.push_back(method);
+}
+
+void Location::getMethodsAllowed() const {
+    for (int i = 0; methodsAllowed.size() > i; ++i){
+        std::cout << methodsAllowed[i] << std::endl;
+    }
 }

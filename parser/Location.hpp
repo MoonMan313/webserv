@@ -17,23 +17,26 @@
 
 class Location {
 protected:
-    std::string                 methodsAllowed;
+    std::vector<std::string>    methodsAllowed;
     bool                        autoindex;
     std::string                 index;
-    std::vector<std::string>    cgi;
+    std::string                 cgi;
     std::string                 redirection;
     std::string                 root;
     unsigned int                limitBodySize;
     std::map<int, std::string>  errorPage;
+public:
+    const std::string &getCgi() const;
+
+    void setCgi(const std::string &cgi);
 
 public:
-    void setMethodsAllowed(const std::string &methodsAllowed);
 
     void setAutoindex(bool autoindex);
 
-    void setIndex(const std::string &index);
+    void setMethodsAllowed(const std::string &method) ;
 
-    void setCgi(const std::vector<std::string> &cgi);
+    void setIndex(const std::string &index);
 
     void setRedirection(const std::string &redirection);
 
@@ -43,15 +46,13 @@ public:
 
     void setErrorPage(char *first, char *second);
 
-    const std::string &getMethodsAllowed() const;
-
     bool isAutoindex() const;
 
     const std::string &getIndex() const;
 
-    const std::vector<std::string> &getCgi() const;
-
     const std::string &getRedirection() const;
+
+    void  getMethodsAllowed() const;
 
     const std::string &getRoot() const;
 

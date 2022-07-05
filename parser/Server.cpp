@@ -8,12 +8,12 @@ Server::Server() {
     host = "";
     port = 0;
     serverNames = "";
-    methodsAllowed = "";
     autoindex = 0;
     index = "";
     redirection = "";
     root = "";
     limitBodySize = 0;
+    cgi = "";
 }
 
 const std::string &Server::getHost() const {
@@ -40,12 +40,15 @@ void Server::setServerNames(const std::string &serverNames) {
     Server::serverNames = serverNames;
 }
 
-void Server::setLocation(const std::map<std::string, Location *> &location) {
-    Server::location = location;
+void Server::setLocation(char *first, Location *second) {
+    Server::location[first] = second;
 }
 
-const std::map<std::string, Location *> &Server::getLocation() const {
-    return location;
+Location *Server::getLocation(char *path) {
+    std::map<std::string, Location *>::iterator it;
+    if (it != location.end())
+        return it->second;
+    return NULL;
 }
 
 //const std::vector<std::string> &Server::getServerName() const {
