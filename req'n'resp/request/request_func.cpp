@@ -47,8 +47,8 @@ void headers_parsing(std::string headers_line, Request *req)
 	req->setHeaders(get_headers(headers_line, req));
 	if (req->getHeaders()["Host"].find(':') != std::string::npos)
 	{
-		req->setPort(std::stoi((req->getHeaders()["Host"]). \
-			substr(req->getHeaders()["Host"].find(':') + 1)));
+		req->setPort((req->getHeaders()["Host"]). \
+			substr(req->getHeaders()["Host"].find(':') + 1));
 	}
 }
 

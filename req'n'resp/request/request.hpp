@@ -6,7 +6,7 @@
 /*   By: dmitriyp <dmitriyp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 14:58:20 by dmitriyp          #+#    #+#             */
-/*   Updated: 2022/06/05 14:13:03 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/07/05 10:40:06 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 class Request
 {
 private:
-	int									_port;
 	int									_resp_status;
+	std::string							_port;
 	std::string							_method;
 	std::string							_version;
 	std::string							_path;
@@ -24,8 +24,8 @@ private:
 	std::string							_query;
 	std::string							_fragment;
 	std::string							_encoding;
-	std::string							_accept;
-	std::string							_connection;
+	std::string							_accept; //?
+	std::string							_connection; //?
 	std::string						 	_language;
 	std::map<std::string, std::string>	_headers;
 public:
@@ -39,7 +39,7 @@ public:
 	std::string							getFragment() const;
 	std::string							getBody() const;
 	std::map<std::string, std::string>	getHeaders() const;
- 	int									getPort() const;
+ 	std::string							getPort() const;
 	int									getRespStatus() const;
 
 	void								setMethod(std::string method);
@@ -48,7 +48,7 @@ public:
 	void								setQuery(std::string query);
 	void								setHeaders(std::map<std::string, \
 		std::string> headers);
-	void								setPort(int port);
+	void								setPort(std::string port);
 	void								setRespStatus(int rest_status);
 	void								setFragment(std::string fragment);
 	void								setBody(std::string body);

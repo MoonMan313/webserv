@@ -24,30 +24,32 @@ unsigned long slash_or_end(std::string str)
 
 // make _resp sting to send to request
 void Response::path_assembling_n_check(std::map<std::string, \
-	Location> Locations, Request &req) // here link assembled ё
+	Location> Locations, Request *req) // here link assembled ё
 {
+	//check referer part to apply proper folder
 	std::string temp_path;
 	unsigned long slash_pos;
-
+	if (req->getHeaders()["Referer"] != "" && \
+	!is_file(req->getHeaders()["Referer"]))
+		apply_referer(req);
+	//check referer header in case is necessary to assemble path acc to it
 	temp_path = "/";
-	slash_pos = slash_or_end(req.getPath());
-	if (is_file(req.getPath()))
+	slash_pos = slash_or_end(req->getPath());
+	if (is_file(req->getPath()))
 	{
-		if (slash_pos != req.getPath().length())
-			temp_path = req.getPath().substr(0, slash_pos);
+		if (slash_pos != req->getPath().length())
+			temp_path = req->getPath().substr(0, slash_pos);
 	}
 	else
-		temp_path = req.getPath().substr(0, slash_pos);
+		temp_path = req->getPath().substr(0, slash_pos);
 	if (Locations.count(temp_path) != 0) // check if server root should be here
 	{
 		this->setRoot(Locations[temp_path].root + \
-			req.getPath().substr(req.getPath().find(temp_path) \
+			req->getPath().substr(req->getPath().find(temp_path) \
 			+ temp_path.length())); // get substr with proper root naming
 	}
 	else
 		std::cout << "failure, location not found" << std::endl;
-	//define if file or dir and add index if necessary
-
 	std::cout << this->getRoot().compare("") << " here is the num" << std::endl;
 	if (!is_file(this->getRoot()) && this->getRoot().compare("") != 0)
 		this->setRoot(this->getRoot() + "/" + Locations[temp_path].index);
@@ -63,10 +65,13 @@ void Response::execute_delete(Request &req) {(void)req;};
 
 void Response::execute_get(Request &req)
 {
-	(void)req;
+	//(void)req;
 	std::string file_data;
-
-	file_data = get_file_data(this->getRoot());
+	if (req.getHeaders()["Referer"] == "")
+		std::cout << "YES" << std::endl;
+	std::cout << req.getHeaders()["Referer"] << " <- ref" << std::endl;
+	std::cout << "RORUTE IS :" << this->getRoot() << "and req path is " << req.getPath() << std::endl;
+	file_data = get_file_data(this->getRoot(), req);
 	std::string hello = "HTTP/1.1 200 Okay\r\nContent-Transfer-Encoding: binary; Content-Length: " + \
 	std::to_string(file_data.length()) + ";charset=ISO-8859-4; Accept-Language : ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7 \r\n\r\n" + file_data;
 	this->setRespons(hello);
@@ -98,7 +103,7 @@ void Response::make_response(std::map<std::string, Location> Locations, \
 		return make_err_resp(req.getRespStatus());
 	else
 		//define _root
-		path_assembling_n_check(Locations, req);
+		path_assembling_n_check(Locations, &req);
 
 	//execute method
 	execute(req);

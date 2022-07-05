@@ -5,7 +5,7 @@
 #ifndef PARSER_LOCATION_HPP
 #define PARSER_LOCATION_HPP
 
-#include "request.hpp"
+#include "cgi.hpp"
 
 class Location {
 public:

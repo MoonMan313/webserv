@@ -27,7 +27,7 @@ public:
 		Request &req);
 
 	void path_assembling_n_check(std::map<std::string, Location> Locations, \
-		Request &req); // here link assembled ё
+		Request *req); // here link assembled ё
 	//	with root locatiion from Config
 	// open question - if is a file of diff type
 	// open resourse which is not present on a server?
@@ -47,7 +47,8 @@ public:
 	std::string getRespons();
 };
 
-std::string get_file_data(std::string filename);
+std::string get_file_data(std::string filename, Request &req);
 int is_file(std::string filename);
+void apply_referer(Request *);
 
 #endif

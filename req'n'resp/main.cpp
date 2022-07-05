@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:52:00 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/06/16 16:20:40 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/07/05 15:12:48 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 #include "response.hpp"
 //#include "Location.hpp"
-#define PORT 8080
+#define PORT 8070
 
 void send_image(void)
 {
@@ -76,12 +76,11 @@ void send_image(void)
         char buffer[30000] = {0};
         read( new_socket , buffer, 30000);
 		std::string str = buffer;
-		//std::cout << str << std::endl << str.substr(0, str.find("\n")) << std::endl;
+		std::cout << str << std::endl; //<< str.substr(0, str.find("\n")) << std::endl;
 		// implement here reading of requests from browser
 		req.parse_request(str);
 		//resp.path_assembling_n_heck(locs, req);
 		resp.make_response(locs, req);
-
         send(new_socket , resp.getRespons().c_str(), resp.getRespons().length(), MSG_DONTROUTE);
         printf("------------------Hello image sent-------------------");
 		usleep(100000);

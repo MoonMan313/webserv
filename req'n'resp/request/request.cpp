@@ -6,13 +6,13 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/06/16 15:51:20 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/07/05 10:44:05 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "request.hpp"
 
-Request::Request() :  _port(80), _resp_status(200), _method(""), \
+Request::Request() :  _resp_status(200), _port("80"), _method(""), \
 _path(""), _body(""), _query("") {};
 
 Request::~Request(){};
@@ -47,7 +47,7 @@ std::map<std::string, std::string> Request::getHeaders() const
 	return (this->_headers);
 };
 
-int Request::getPort() const
+std::string	Request::getPort() const
 {
 	return (this->_port);
 };
@@ -81,7 +81,7 @@ void Request::setPath(std::string path)
 
 void Request::setQuery(std::string query)
 {
-	percent_decoding(&query);
+	percent_decoding(&query); // may be failure to devode here as equeal sign could appear inside credentials etc
 	this->_query = query;
 };
 
@@ -97,7 +97,7 @@ void Request::setHeaders(std::map<std::string, std::string> headers)
 	this->_headers = headers;
 };
 
-void Request::setPort(int port)
+void Request::setPort(std::string port)
 {
 	this->_port = port;
 };
