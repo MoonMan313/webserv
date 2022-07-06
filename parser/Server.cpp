@@ -46,6 +46,7 @@ void Server::setLocation(char *first, Location *second) {
 
 Location *Server::getLocation(char *path) {
     std::map<std::string, Location *>::iterator it;
+    it = location.find(path);
     if (it != location.end())
         return it->second;
     return NULL;

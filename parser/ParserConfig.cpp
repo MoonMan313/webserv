@@ -59,9 +59,8 @@ ParserConfig::ParserConfig(char *pathConfig) {
     try {
         if (!file.is_open())
             throw "Failed to open configuration file.";
-        while (std::getline(file, line)) {
+        while (std::getline(file, line))
             config += line + " ; ";
-        }
         char *str = const_cast<char *>(config.c_str());
         char *word = std::strtok(str, " \t\v;");
         int i = -1;
@@ -77,7 +76,6 @@ ParserConfig::ParserConfig(char *pathConfig) {
                         servers[i]->setPort(atoi(strtok(NULL, " \t\v;")));
                     } else if (!strcmp(word, "server_name") && servers[i]->getServerNames() == "") {
                         servers[i]->setServerNames(strtok(NULL, " \t\v;"));
-                    } else if (parserLocation(word, servers[i])) {
                     } else if (!strcmp(word, "location")) {
                         char *path = strtok(NULL, " \t\v");
                         servers[i]->setLocation(path, new Location);
@@ -85,17 +83,17 @@ ParserConfig::ParserConfig(char *pathConfig) {
                             while (parserLocation(strtok(NULL, " \t\v;"), servers[i]->getLocation(path))) {}
                         else
                             throw "Error in configuration file.";
-                    } else if (!strcmp(word, "}")) {
+                    } else if (parserLocation(word, servers[i])) {
+                    } else if (!strcmp(word, "}"))
                         break;
-                    } else {
+                    else
                         throw "Error in configuration file.";
-                    }
                     word = strtok(NULL, " \t\v;");
                 }
-            } else
+            } else if (!strcmp(word, "}"))
+                word = strtok(NULL, " \t\v;");
+            else
                 throw "Error in configuration file.";
-
-            word = strtok(NULL, " \t\v;");
         }
     }
     catch (const char *text_error) {
@@ -104,7 +102,6 @@ ParserConfig::ParserConfig(char *pathConfig) {
     file.close();
 }
 
-
-//const std::vector<Server *> &ParserConfig::getServers() const {
-//
-//}
+const std::vector<Server *> &ParserConfig::getServers() const {
+    return servers;
+}

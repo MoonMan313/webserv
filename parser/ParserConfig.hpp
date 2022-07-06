@@ -24,7 +24,7 @@ private:
 public:
     ParserConfig(char *pathConfig);
 
-//    const std::vector<Server *> &getServers() const;
+    const std::vector<Server *> &getServers() const;
 };
 
 
