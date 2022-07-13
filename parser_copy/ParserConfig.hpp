@@ -7,7 +7,7 @@
 
 #include "Server.hpp"
 
-#define DEFAULT_CONFIG "/home/evelina/Desktop/webserver/parser/default.conf"
+#define DEFAULT_CONFIG "parser_copy/default.conf"
 
 class ParserConfig {
 private:

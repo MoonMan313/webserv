@@ -93,11 +93,12 @@ ParserConfig::ParserConfig(char *pathConfig) {
             else
                 throw "Error in configuration file.";
         }
+        file.close();
     }
     catch (const char *text_error) {
         std::cout << text_error << std::endl;
+        exit(0);
     }
-    file.close();
 }
 
 const std::vector<Server *> &ParserConfig::getServers() const {

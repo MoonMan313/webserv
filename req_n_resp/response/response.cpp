@@ -46,13 +46,15 @@ void Response::path_assembling_n_check(std::map<std::string, \
 		temp_path = req->getPath().substr(0, slash_pos);
 	if (Locations.count(temp_path) != 0) // check if server root should be here
 	{
-		this->setRoot(Locations[temp_path].root + \
+        std::cout << Locations[temp_path].root << "<- LOCATION ROOT" << std::endl;
+        this->setRoot(Locations[temp_path].root + \
 			req->getPath().substr(req->getPath().find(temp_path) \
 			+ temp_path.length())); // get substr with proper root naming
+        std::cout << this->getRoot() << "<- ROOT" << std::endl;
 	}
 	else
-		std::cout << "failure, location not found" << std::endl;
-	std::cout << this->getRoot().compare("") << " here is the num" << std::endl;
+		std::cout << "failure, location not found"  << std::endl;
+	std::cout << this->getRoot().compare("") << " here is the num" << Locations[temp_path].index << std::endl;
 	if (!is_file(this->getRoot()) && this->getRoot().compare("") != 0)
 		this->setRoot(this->getRoot() + "/" + Locations[temp_path].index);
 	else if (!is_file(this->getRoot()))
@@ -99,15 +101,15 @@ void Response::execute_get(Request req)
 		make_err_resp(req.getRespStatus());
 	else
 	{
-		hello = "HTTP/1.1 301 Okay\r\nLocation : https://yandex.ru/";
+		//hello = "HTTP/1.1 301 Okay\r\nLocation : https://yandex.ru/";
 		//;\
 		// Accept-Language : " + req.getHeaders()["Accept-Language"] \
 		//+ " \r\n\r\n";
 
-		/*hello = "HTTP/1.1 200 Okay\r\nContent-Transfer-Encoding: binary; \
+		hello = "HTTP/1.1 200 Okay\r\nContent-Transfer-Encoding: binary; \
 		Content-Length: " + std::to_string(file_data.length()) + \
 		"; Accept-Language : " + req.getHeaders()["Accept-Language"] \
-		+ " \r\n\r\n" + file_data;*/
+		+ " \r\n\r\n" + file_data;
 		this->setRespons(hello);
 	}
 };

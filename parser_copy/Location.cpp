@@ -6,7 +6,12 @@
 #include "Location.hpp"
 
 Location::Location() {
-
+    autoindex = 0;
+    index = "";
+    redirection = "";
+    root = "";
+    limitBodySize = 0;
+    cgi = "";
 }
 
 bool Location::isAutoindex() const {

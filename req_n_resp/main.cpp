@@ -22,7 +22,7 @@
 
 #include "response.hpp"
 //#include "Location.hpp"
-#define PORT 8080
+#define PORT 8070
 
 void send_image(ParserConfig config)
 {
@@ -40,6 +40,7 @@ void send_image(ParserConfig config)
 	lc2.root = "temp";*/
 	locs["/"] = *config.getServers()[0]->getLocation(str1.c_str());
 	locs["/path"] = *config.getServers()[0]->getLocation(str2.c_str());
+    std::cout << locs["/path"].getRoot() << " AAANDDDD " << locs["/"].getRoot() << std::endl;
 
     int server_fd, new_socket;
 	//long valread;
