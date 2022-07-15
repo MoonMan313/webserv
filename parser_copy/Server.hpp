@@ -31,6 +31,7 @@ public:
     unsigned int getPort() const;
 
     const std::string &getServerNames() const;
+    
     void setHost(const std::string &host);
 
     void setPort(unsigned int port);

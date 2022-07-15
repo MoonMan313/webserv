@@ -11,7 +11,7 @@
 
 class Location {
 //protected: change it to public temporary
-public:
+protected:
     std::vector<std::string>    methodsAllowed;
     bool                        autoindex;
     std::string                 index;

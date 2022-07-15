@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 
-class WebServer {
+class Server {
 private:
     struct sockaddr_in                  _addr;
     int                                 _fd;

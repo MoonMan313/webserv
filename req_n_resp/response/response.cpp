@@ -24,8 +24,7 @@ unsigned long slash_or_end(std::string str)
 }
 
 // make _resp sting to send to request
-void Response::path_assembling_n_check(std::map<std::string, \
-	Location> Locations, Request *req)
+void Response::path_assembling_n_check(Server *serv, Request *req)
 {
 	//check referer part to apply proper folder
 	std::string temp_path;
@@ -44,6 +43,10 @@ void Response::path_assembling_n_check(std::map<std::string, \
 	}
 	else
 		temp_path = req->getPath().substr(0, slash_pos);
+	//here temp path should be compared w server ROOT field
+	
+
+	//search for server locations for a necessary file
 	if (Locations.count(temp_path) != 0) // check if server root should be here
 	{
         std::cout << Locations[temp_path].root << "<- LOCATION ROOT" << std::endl;
@@ -130,13 +133,29 @@ void Response::execute(Request req)
 	(this->*f[i])(req);
 };
 
-void Response::make_response(std::map<std::string, Location> Locations, \
-	Request req)
+Server *Response::server_availabe(ParserConfig config, Request req)
 {
+	std::vector<Server *>::iterator it;
+
+	it = config.getServers().begin();
+	while (it != config.getServers().end())
+	{
+		if ((*it)->getPort() == std::stoi(req.getPort()) && (*it)->getHost() == req.getHost())
+			return (*it);
+	}
+	return NULL;
+}
+
+void Response::make_response(ParserConfig config, Request req)
+{
+	Server *serv;
 	if (req.getRespStatus() != 200)
 		return make_err_resp(req.getRespStatus());
-	else
-		path_assembling_n_check(Locations, &req);
+	serv = server_availabe(config, req);
+	if (!serv)
+		return make_err_resp(404);
+	//check if server is availble?
+	path_assembling_n_check(serv, &req);
 	execute(req);
 }
 

@@ -104,7 +104,7 @@ void    Server::connect()
                 // Поступили данные от клиента, читаем их
                 int bytes_read = recv(*it, buffer, 30000, 0);
 
-                std:: cout << "bytes reads are: " << bytes_read << std::endl;
+                std:: cout << "bytes reads are: " << buffer << std::endl;
                 if(bytes_read <= 0)
                 {
                     // Соединение разорвано, удаляем сокет из множества
@@ -123,8 +123,8 @@ void    Server::connect()
                                     </div>\
                                     <body>\
 	                                </html>";
-    std::string str = buffer;
-		std::cout << str << std::endl << str.substr(0, str.find("\n")) << std::endl;
+                std::string str = buffer;
+                std::cout << str << std::endl << str.substr(0, str.find("\n")) << std::endl;
 
                 // Отправляем данные обратно клиенту
                 int send_bytes = send(*it, hello.c_str() , hello.length(), MSG_DONTROUTE);
