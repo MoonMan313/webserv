@@ -62,6 +62,11 @@ std::string	Request::getPort() const
 	return (this->_port);
 };
 
+std::string	Request::getHost() const
+{
+	return (this->_host);
+};
+
 int Request::getRespStatus() const
 {
 	return (this->_resp_status);
@@ -120,6 +125,11 @@ void Request::setHeadersCgi(std::map<std::string, std::string> headers)
 void Request::setPort(std::string port)
 {
 	this->_port = port;
+};
+
+void Request::setHost(std::string host)
+{
+	this->_host = host;
 };
 
 void Request::setRespStatus(int rest_status)

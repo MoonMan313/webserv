@@ -59,8 +59,76 @@ void apply_referer(Request *req)
 	pos = req->getHeaders()["Referer"].find(req->getPort());
 	temp_path = req->getHeaders()["Referer"].substr(pos + \
 		req->getPort().length());
+	if (is_file(temp_path))
+		temp_path = temp_path.substr(0, temp_path.rfind("/"));
 	if (temp_path.back() == '/')
 		temp_path.pop_back();
 	temp_path = temp_path + req->getPath();
+	std::cout << "path w referer: " << temp_path << std::endl;
 	req->setPath(temp_path);
+};
+
+
+int check_method(std::vector<std::string> vec, std::string meth)
+{
+	std::vector<std::string>::iterator it;
+
+	it = vec.begin();
+	while (it != vec.end())
+	{
+		if (*it == meth)
+			return (1);
+		it++;
+	};
+	return (0);
+}
+
+int method_allowed(Server *serv, char const *loc_name, Request *req)
+{	
+	std::cout << "location METHODS: " << serv->getLocation(loc_name)->getMethodsAllowed().empty() << std::endl;
+	if (!serv->getLocation(loc_name)->getMethodsAllowed().empty())
+	{
+		if (check_method(serv->getLocation(loc_name)->getMethodsAllowed(), req->getMethod()))
+			return (1);
+	}
+	else 
+	{	
+		if (check_method(serv->getMethodsAllowed(), req->getMethod()))
+			return (1);
+	}	
+	return (0);
+}
+
+std::string check_locations(Server *serv, std::string file_extension, std::string temp_path, Request *req)
+{
+	//first check if location appeared w file extension
+	std::cout << "FILE EXTENSION: " << file_extension << std::endl;
+	std::cout << "PATH IS: " << temp_path << serv->getLocation(temp_path.c_str()) << std::endl;
+	if (serv->getLocation(file_extension.c_str()) != NULL)
+	{
+		//check if method is allowd
+		if (method_allowed(serv, file_extension.c_str(), req))
+		{
+			std::cout << "We got bla file -> let's see incoming path: " << temp_path << std::endl;
+			return (serv->getLocation(file_extension.c_str())->getRoot() + "cgi_bin/cgi_tester");
+		}
+		else
+			req->setRespStatus(405);
+			//err page method not allowe
+	}
+	else if (serv->getLocation(temp_path.c_str()) != NULL)
+	{
+		if (method_allowed(serv, temp_path.c_str(), req))
+		{
+			// define path
+			std::cout << "We got path, not file -> let's see incoming path: " << temp_path << std::endl;
+			return (serv->getLocation(temp_path.c_str())->getRoot());
+		}
+		else
+			req->setRespStatus(405);
+			//err page method not allowe
+	}
+	else
+		req->setRespStatus(404);
+	return ("");
 };
