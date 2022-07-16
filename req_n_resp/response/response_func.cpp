@@ -99,7 +99,7 @@ int method_allowed(Server *serv, char const *loc_name, Request *req)
 	return (0);
 }
 
-std::string check_locations(Server *serv, std::string file_extension, std::string temp_path, Request *req)
+Location *check_locations(Server *serv, std::string file_extension, std::string temp_path, Request *req)
 {
 	//first check if location appeared w file extension
 	std::cout << "FILE EXTENSION: " << file_extension << std::endl;

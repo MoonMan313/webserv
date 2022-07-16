@@ -6,7 +6,7 @@ RS		= response
 
 CG		= cgi
 
-PR		= parser_copy
+PR		= website/parser_copy
 
 СС      = с++
 

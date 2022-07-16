@@ -26,7 +26,7 @@ const std::string &Location::getRedirection() const {
     return redirection;
 }
 
-const std::string &Location::getRoot() const {
+std::string &Location::getRoot() const {
     return root;
 }
 
@@ -78,8 +78,6 @@ void Location::setMethodsAllowed(const std::string &method) {
     methodsAllowed.push_back(method);
 }
 
-void Location::getMethodsAllowed() const {
-    for (unsigned long i = 0; methodsAllowed.size() > i; ++i){
-        std::cout << methodsAllowed[i] << std::endl;
-    }
+std::vector<std::string> Location::getMethodsAllowed() const {
+    return this->methodsAllowed;
 }

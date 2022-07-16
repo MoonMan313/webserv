@@ -30,6 +30,7 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	unsigned long slash_pos;
 	std::string	file_extension;
 	std::string temp_root;
+	Location *loc;
 
 	if (is_file(req->getPath()))
 		file_extension = req->getPath().substr(req->getPath().rfind("."));
@@ -47,8 +48,8 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	else
 		temp_path = req->getPath().substr(0, slash_pos);
 	//here temp path should be compared w server ROOT field where file extension or folder name shall be searched
-	temp_root = check_locations(serv, file_extension, temp_path, req);
-
+	loc = check_locations(serv, file_extension, temp_path, req);
+	temp_root = loc->getRoot();
 	std::cout << "root before marriage: " << temp_root << " and temp path" << temp_path << " and req path: " << req->getPath() << std::endl;
 	this->setRoot("");
 	// if location is empty string -> goto respStatus and make proper err response
@@ -61,7 +62,10 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	}
 	if (!(is_file(temp_root)))
 	{
-		if (serv->getLocation)
+		if (loc->getIndex() != "")
+			temp_root = temp_root + loc->getIndex();
+		else
+			temp_root = temp_root + serv->getIndex();
 	};
 	
 	std::cout << "temp root to file is " << temp_root << std::endl;
