@@ -67,11 +67,7 @@ void headers_parsing(std::string headers_line, Request *req)
 	{
 		req->setPort((req->getHeaders()["Host"]). \
 			substr(req->getHeaders()["Host"].find(':') + 1));
-		req->setHost(req->getHeaders()["Host"].substr(0, req->getHeaders()["Host"].find(":")));
 	}
-	else
-		req->setHost(req->getHeaders()["Host"]);
-
 }
 
 void parse_path(Request *req, std::string raw_line)
