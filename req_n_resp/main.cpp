@@ -22,7 +22,7 @@
 
 #include "response.hpp"
 //#include "Location.hpp"
-#define PORT 8080
+#define PORT 8070
 
 void send_image(ParserConfig config)
 {

@@ -20,12 +20,10 @@ protected:
     std::string                 root;
     unsigned int                limitBodySize;
     std::map<int, std::string>  errorPage;
-
+public:
     const std::string &getCgi() const;
 
     void setCgi(const std::string &cgi);
-
-public:
 
     void setAutoindex(bool autoindex);
 
@@ -49,7 +47,7 @@ public:
 
     std::vector<std::string> getMethodsAllowed() const;
 
-    std::string &getRoot() const;
+    std::string getRoot() const;
 
     unsigned int getLimitBodySize() const;
 

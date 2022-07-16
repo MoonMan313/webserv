@@ -29,8 +29,6 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	std::string temp_path;
 	unsigned long slash_pos;
 	std::string	file_extension;
-	std::string temp_root;
-	Location *loc;
 
 	if (is_file(req->getPath()))
 		file_extension = req->getPath().substr(req->getPath().rfind("."));
@@ -48,44 +46,9 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	else
 		temp_path = req->getPath().substr(0, slash_pos);
 	//here temp path should be compared w server ROOT field where file extension or folder name shall be searched
-	loc = check_locations(serv, file_extension, temp_path, req);
-	temp_root = loc->getRoot();
-	std::cout << "root before marriage: " << temp_root << " and temp path" << temp_path << " and req path: " << req->getPath() << std::endl;
-	this->setRoot("");
-	// if location is empty string -> goto respStatus and make proper err response
-	if (temp_root == "")
-		return ;
-	temp_root = temp_root + req->getPath().substr(req->getPath().find(temp_path) + temp_path.length());
-	while (temp_root.find("//") != std::string::npos)
-	{
-		temp_root.erase(temp_root.find("//"), 1);
-	}
-	if (!(is_file(temp_root)))
-	{
-		if (loc->getIndex() != "")
-			temp_root = temp_root + loc->getIndex();
-		else
-			temp_root = temp_root + serv->getIndex();
-	};
-	
-	std::cout << "temp root to file is " << temp_root << std::endl;
-
-	this->setRoot("");
-	/*if (Locations.count(temp_path) != 0) // check if server root should be here
-	{
-        std::cout << Locations[temp_path].root << "<- LOCATION ROOT" << std::endl;
-        this->setRoot(Locations[temp_path].root + \
-			req->getPath().substr(req->getPath().find(temp_path) \
-			+ temp_path.length())); // get substr with proper root naming
-        std::cout << this->getRoot() << "<- ROOT" << std::endl;
-	}
-	else
-		std::cout << "failure, location not found"  << std::endl;
-	std::cout << this->getRoot().compare("") << " here is the num" << Locations[temp_path].index << std::endl;
-	if (!is_file(this->getRoot()) && this->getRoot().compare("") != 0)
-		this->setRoot(this->getRoot() + "/" + Locations[temp_path].index);
-	else if (!is_file(this->getRoot()))
-		this->setRoot(Locations[temp_path].index);*/
+	temp_path = check_locations(serv, file_extension, temp_path, req);
+	std::cout << "temp root to file is :" << temp_path << "<-" << std::endl;
+	this->setRoot(temp_path);
 };
 
 void Response::execute_post(Request req)
@@ -110,7 +73,10 @@ int	check_file(std::string filename)
 
 	pFile = fopen(filename.c_str(), "r");
 	if (pFile == NULL)
+	{
 		out = -1;
+		std::cout << "getting filedata" << std::endl;
+	}
 	fclose (pFile);
 	return (out);
 };
@@ -122,7 +88,10 @@ void Response::execute_get(Request req)
 	std::string hello;
 
 	if (check_file(this->getRoot()) != -1)
+	{
 		file_data = get_file_data(this->getRoot(), &req);
+	}
+
 	//check here if file-data is not awailable;
 	if (req.getRespStatus() != 200)
 		make_err_resp(req.getRespStatus());
@@ -174,6 +143,7 @@ Server *Response::server_availabe(ParserConfig config, Request req)
 void Response::make_response(ParserConfig config, Request req)
 {
 	Server *serv;
+
 	if (req.getRespStatus() != 200)
 		return make_err_resp(req.getRespStatus());
 	serv = server_availabe(config, req);

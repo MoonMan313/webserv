@@ -26,7 +26,7 @@ const std::string &Location::getRedirection() const {
     return redirection;
 }
 
-std::string &Location::getRoot() const {
+std::string Location::getRoot() const {
     return root;
 }
 

@@ -49,6 +49,6 @@ public:
 std::string get_file_data(std::string filename, Request *req);
 int is_file(std::string filename);
 void apply_referer(Request *);
-Location *check_locations(Server *serv, std::string file_extension, std::string temp_path, Request *req);
+std::string check_locations(Server *serv, std::string file_extension, std::string temp_path, Request *req);
 
 #endif
