@@ -17,6 +17,7 @@ class Request
 private:
 	int									_resp_status;
 	std::string							_port;
+	std::string							_host;
 	std::string							_method;
 	std::string							_version;
 	std::string							_path;
@@ -45,6 +46,7 @@ public:
 	std::map<std::string, std::string>	getHeaders() const;
 	std::map<std::string, std::string>	getHeadersCgi() const;
 	std::string							getPort() const;
+	std::string							getHost() const;
 	int									getRespStatus() const;
 	//setters
 	void								setMethod(std::string method);
@@ -57,6 +59,7 @@ public:
 	void								setHeadersCgi(std::map<std::string, \
 		std::string> headers);
 	void								setPort(std::string port);
+	void								setHost(std::string host);
 	void								setRespStatus(int rest_status);
 	void								setFragment(std::string fragment);
 	void								setBody(std::string body);

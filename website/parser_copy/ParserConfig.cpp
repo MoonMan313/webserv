@@ -101,6 +101,6 @@ ParserConfig::ParserConfig(char *pathConfig) {
     }
 }
 
-const std::vector<Server *> &ParserConfig::getServers() const {
+std::vector<Server *> ParserConfig::getServers() const {
     return servers;
 }

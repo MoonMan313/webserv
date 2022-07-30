@@ -22,24 +22,12 @@
 
 #include "response.hpp"
 //#include "Location.hpp"
-#define PORT 8080
+#define PORT 8070
 
 void send_image(ParserConfig config)
 {
 	Request req;
 	Response resp;
-	std::map<std::string, Location> locs;
-	//Location lc1;
-	//Location lc2;
-
-	std::string str1 = "/";
-	std::string str2 = "/directory/";
-	//lc1 = config.getServers()[0]->getLocation(str1.c_str());
-	//lc2 = config.getServers()[0]->getLocation(str2.c_str());
-	/*lc1.root = "";
-	lc2.root = "temp";*/
-	locs["/"] = *config.getServers()[0]->getLocation(str1.c_str());
-	locs["/path"] = *config.getServers()[0]->getLocation(str2.c_str());
 
     int server_fd, new_socket;
 	//long valread;
@@ -83,7 +71,7 @@ void send_image(ParserConfig config)
 		std::cout << str << std::endl; //<< str.substr(0, str.find("\n")) << std::endl;
 		// implement here reading of requests from browser
 		req.parse_request(str);
-		resp.make_response(locs, req);
+		resp.make_response(config, req);
         send(new_socket , resp.getRespons().c_str(), resp.getRespons().length(), MSG_DONTROUTE);
         printf("------------------Hello image sent-------------------");
 		usleep(100000);
@@ -99,7 +87,7 @@ int main (int argc, char **argv)
 		return 0;
 	}
 	ParserConfig config(argv[1]);
-    
+
 	send_image(config);
 	return (0);
 };

@@ -7,7 +7,7 @@
 
 #include "Server.hpp"
 
-#define DEFAULT_CONFIG "parser_copy/default.conf"
+#define DEFAULT_CONFIG "website/parser_copy/default.conf"
 
 class ParserConfig {
 private:
@@ -16,7 +16,7 @@ private:
 public:
     ParserConfig(char *pathConfig);
 
-    std::vector<Server *> &getServers() const;
+    std::vector<Server *> getServers() const;
 };
 
 
