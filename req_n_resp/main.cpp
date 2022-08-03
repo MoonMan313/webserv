@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:52:00 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/07/10 21:10:47 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/07/31 16:50:57 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void send_image(ParserConfig config)
 		std::string str = buffer;
 		std::cout << str << std::endl; //<< str.substr(0, str.find("\n")) << std::endl;
 		// implement here reading of requests from browser
+
 		req.parse_request(str);
 		resp.make_response(config, req);
         send(new_socket , resp.getRespons().c_str(), resp.getRespons().length(), MSG_DONTROUTE);

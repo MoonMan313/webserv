@@ -5,11 +5,30 @@ Response::Response(){};
 Response::~Response(){};
 
 //err status making
-void Response::make_err_resp(int resp_status)
+void Response::make_err_resp(Server *serv, Request req)
 {
-	this->setRespons("HTTP/1.1 " + std::to_string(resp_status)\
-		+ "Bad Request");
-		// add link to error page from CONFIG (abs patg to err file)
+	//may be this type of logic make no sense due to failure header status
+	std::string file_data;
+	std::string hello;
+	std::string err_page_root;
+	std::string status;
+
+
+	file_data = get_file_data(this->getRoot(), &req);// may be add here more
+	// check if root is proper now or what?
+
+	status = serv->getErrorPage(req.getRespStatus());
+	// get root for err page
+	err_page_root = serv->getRoot() + "/" + std::to_string(req.getRespStatus()) \
+	+ ".html";
+	std::cout << "CHECK ERR PAGE ROOT: " << err_page_root << std::endl;
+	std::cout << "CHECK RESP STATUS " << req.getRespStatus() << std::endl;
+	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + status + \
+	"\r\nContent-Transfer-Encoding: binary; \
+	Content-Length: " + std::to_string(file_data.length()) + \
+	"; Accept-Language : " + req.getHeaders()["Accept-Language"] \
+	+ " \r\n\r\n" + file_data;
+	this->setRespons(hello);
 };
 
 unsigned long slash_or_end(std::string str)
@@ -51,18 +70,20 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	this->setRoot(temp_path);
 };
 
-void Response::execute_post(Request req)
+void Response::execute_post(Request req, Server *serv)
 {
 	//status 202 - Accepted status to send in response in case file is accepted
 
 	(void)req;
+	(void)serv;
 
 };
 
-void Response::execute_delete(Request req)
+void Response::execute_delete(Request req, Server *serv)
 {
 	//check status with girls video
 	(void)req;
+	(void)serv;
 
 };
 
@@ -81,7 +102,7 @@ int	check_file(std::string filename)
 	return (out);
 };
 
-void Response::execute_get(Request req)
+void Response::execute_get(Request req, Server *serv)
 {
 	//think here how to implement redirect
 	std::string file_data;
@@ -94,9 +115,11 @@ void Response::execute_get(Request req)
 
 	//check here if file-data is not awailable;
 	if (req.getRespStatus() != 200)
-		make_err_resp(req.getRespStatus());
+		make_err_resp(serv, req);
 	else
 	{
+		//check for redirect here mayt be
+
 		//hello = "HTTP/1.1 301 Okay\r\nLocation : https://yandex.ru/";
 		//;\
 		// Accept-Language : " + req.getHeaders()["Accept-Language"] \
@@ -110,11 +133,11 @@ void Response::execute_get(Request req)
 	}
 };
 
-void Response::execute(Request req)
+void Response::execute(Request req, Server *serv)
 {
 	std::string methods[3];
 	int i = -1;
-	void (Response::*f[3])(Request req) = {
+	void (Response::*f[3])(Request req, Server *serv) = {
 		&Response::execute_get,
 		&Response::execute_post,
 		&Response::execute_delete,
@@ -123,17 +146,21 @@ void Response::execute(Request req)
 	methods[1] = "POST";
 	methods[2] = "DELETE";
 	while(req.getMethod() != methods[++i]);
-	(this->*f[i])(req);
+	(this->*f[i])(req, serv);
 };
 
 Server *Response::server_availabe(ParserConfig config, Request req)
 {
-	std::vector<Server *>::const_iterator  it;
+	std::vector<Server *> servers;
+	std::vector<Server *>::const_iterator it;
 
-	it = config.getServers().begin();
-	while (it != config.getServers().end())
+	servers = config.getServers();
+	it = servers.begin();
+	while (it != servers.end())
 	{
-		if ((*it)->getPort() == std::stoul(req.getPort()) && (*it)->getHost() == req.getHost())
+		std::cout << (*it)->getHost() << std::endl;
+		if ((*it)->getPort() == std::stoul(req.getPort()) && \
+		(*it)->getHost() == req.getHost())
 			return (*it);
 		it++;
 	}
@@ -144,17 +171,20 @@ void Response::make_response(ParserConfig config, Request req)
 {
 	Server *serv;
 
-	if (req.getRespStatus() != 200)
-		return make_err_resp(req.getRespStatus());
 	serv = server_availabe(config, req);
+	if (req.getRespStatus() != 200)
+		return make_err_resp(serv, req);
 	if (!serv)
-		return make_err_resp(404);
+	{
+		req.setRespStatus(404);
+		return make_err_resp(serv, req);
+	}
 	//check if server is availble?
 	path_assembling_n_check(serv, &req);
 	//check if req failures arrived
 	if (req.getRespStatus() != 200)
-		return make_err_resp(req.getRespStatus());
-	execute(req);
+		return make_err_resp(serv, req);
+	execute(req, serv);
 }
 
 //SETTERS

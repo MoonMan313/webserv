@@ -51,7 +51,7 @@ public:
 
     unsigned int getLimitBodySize() const;
 
-    void getErrorPage() const;
+    std::string getErrorPage(int err_code);
 
 public:
     Location();

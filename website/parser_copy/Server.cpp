@@ -28,7 +28,9 @@ const std::string &Server::getServerNames() const {
     return serverNames;
 }
 
-void Server::setHost(const std::string &host) {
+void Server::setHost(const std::string &host)
+{
+	std::cout << "HOST IS:" << host << std::endl;
     Server::host = host;
 }
 

@@ -2,7 +2,6 @@
 // Created by Cheryle Dionna on 05/05/2022.
 //
 
-
 #include "Location.hpp"
 
 Location::Location() {
@@ -34,13 +33,18 @@ unsigned int Location::getLimitBodySize() const {
     return limitBodySize;
 }
 
-void Location::getErrorPage() const {
-    std::map <int, std::string>::const_iterator it = errorPage.begin();
-    for (; it != errorPage.end(); it++) {
-        std::cout << it->first << " " << it->second << std::endl;
-    }
+std::string Location::getErrorPage(int err_code)
+{
+    std::map <int, std::string>::const_iterator it;// = errorPage.begin();
+	it = errorPage.find(err_code);
+	if(it != errorPage.end())
+	{
+	    std::cout << "CHECK ERR PAGE" << it->first << " " << it->second << std::endl;
+		return (it->second);
+	}
+	std::cout << "CHECK ERR PAGE FAILED" << std::endl;
+	return (NULL);
 }
-
 
 void Location::setAutoindex(bool autoindex) {
     Location::autoindex = autoindex;

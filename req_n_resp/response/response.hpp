@@ -22,7 +22,6 @@ public:
 
 	// check request with config
 	//void port_check(); // here link to server location Server class here
-
 	void make_response(ParserConfig config, Request req);
 
 	void path_assembling_n_check(Server *serv, Request *req); // here link assembled ё
@@ -30,12 +29,12 @@ public:
 	// open question - if is a file of diff type
 	// open resourse which is not present on a server?
 
-	void execute(Request req);
-	void execute_get(Request req);
-	void execute_post(Request req);
-	void execute_delete(Request req);
+	void execute(Request req, Server *serv);
+	void execute_get(Request req, Server *serv);
+	void execute_post(Request req, Server *serv);
+	void execute_delete(Request req, Server *serv);
 
-	void make_err_resp(int resp_status);
+	void make_err_resp(Server *serv, Request req);
 	Server *server_availabe(ParserConfig config, Request req);
 
 	//setters
