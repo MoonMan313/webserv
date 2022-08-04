@@ -180,3 +180,17 @@ std::string check_locations(Server *serv, std::string file_extension, \
 	}
 	return ("");
 };
+
+int check_limit(Request *req, Server *serv)
+{
+	if (req->getHeaders()["Content Length"] != "")
+	{
+		if (std::stoul(req->getHeaders()["Content Length"]) \
+		> serv->getLimitBodySize())
+		{
+			req->setRespStatus(413);
+			return (1);
+		}
+	}
+	return (0);
+};

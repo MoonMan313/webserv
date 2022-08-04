@@ -8,26 +8,18 @@ Response::~Response(){};
 void Response::make_err_resp(Server *serv, Request req)
 {
 	//may be this type of logic make no sense due to failure header status
-	std::string file_data;
 	std::string hello;
-	std::string err_page_root;
 	std::string status;
 
-
-	file_data = get_file_data(this->getRoot(), &req, serv);// may be add here more
 	// check if root is proper now or what?
-
-	status = serv->getErrorPage(req.getRespStatus());
 	// get root for err page
-	err_page_root = serv->getRoot() + "/" + std::to_string(req.getRespStatus()) \
-	+ ".html";
-	std::cout << "CHECK ERR PAGE ROOT: " << err_page_root << std::endl;
-	std::cout << "CHECK RESP STATUS " << req.getRespStatus() << std::endl;
-	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + status + \
-	"\r\nContent-Transfer-Encoding: binary; \
+	std::cout << "CHECK RESP STATUS " << req.getRespStatus() << "and name: " << serv->getErrorPage(req.getRespStatus()) << std::endl;
+	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + \
+	serv->getErrorPage(req.getRespStatus()) + "\r\n";
+	/*Content-Transfer-Encoding: binary; \
 	Content-Length: " + std::to_string(file_data.length()) + \
 	"; Accept-Language : " + req.getHeaders()["Accept-Language"] \
-	+ " \r\n\r\n" + file_data;
+	+ " \r\n\r\n" + file_data;*/
 	this->setRespons(hello);
 };
 
@@ -176,6 +168,8 @@ void Response::make_response(ParserConfig config, Request req)
 
 	serv = server_availabe(config, req);
 	if (req.getRespStatus() != 200)
+		return make_err_resp(serv, req);
+	if (check_limit(&req, serv))
 		return make_err_resp(serv, req);
 	if (!serv)
 	{

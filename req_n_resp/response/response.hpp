@@ -49,5 +49,6 @@ std::string get_file_data(std::string filename, Request *req, Server *serv);
 int is_file(std::string filename);
 void apply_referer(Request *);
 std::string check_locations(Server *serv, std::string file_extension, std::string temp_path, Request *req);
+int check_limit(Request *req, Server *serv);
 
 #endif
