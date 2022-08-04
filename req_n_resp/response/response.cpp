@@ -14,7 +14,7 @@ void Response::make_err_resp(Server *serv, Request req)
 	std::string status;
 
 
-	file_data = get_file_data(this->getRoot(), &req);// may be add here more
+	file_data = get_file_data(this->getRoot(), &req, serv);// may be add here more
 	// check if root is proper now or what?
 
 	status = serv->getErrorPage(req.getRespStatus());
@@ -67,6 +67,7 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	//here temp path should be compared w server ROOT field where file extension or folder name shall be searched
 	temp_path = check_locations(serv, file_extension, temp_path, req);
 	std::cout << "temp root to file is :" << temp_path << "<-" << std::endl;
+	// redirection happenns here
 	this->setRoot(temp_path);
 };
 
@@ -108,22 +109,23 @@ void Response::execute_get(Request req, Server *serv)
 	std::string file_data;
 	std::string hello;
 
-	if (check_file(this->getRoot()) != -1)
-	{
-		file_data = get_file_data(this->getRoot(), &req);
-	}
-
 	//check here if file-data is not awailable;
-	if (req.getRespStatus() != 200)
-		make_err_resp(serv, req);
+	if (serv->getCurrLocation()->getRedirection() != "")
+	{
+		std::cout << "HERE" << std::endl;
+		hello = "HTTP/1.1 301 Moved Permanently\r\nLocation : " + \
+		serv->getCurrLocation()->getRedirection() + "\r\n\r\n";
+
+		this->setRespons(hello);
+	}
 	else
 	{
 		//check for redirect here mayt be
+		if (check_file(this->getRoot()) != -1)
+		{
+			file_data = get_file_data(this->getRoot(), &req, serv);
+		}
 
-		//hello = "HTTP/1.1 301 Okay\r\nLocation : https://yandex.ru/";
-		//;\
-		// Accept-Language : " + req.getHeaders()["Accept-Language"] \
-		//+ " \r\n\r\n";
 
 		hello = "HTTP/1.1 200 Okay\r\nContent-Transfer-Encoding: binary; \
 		Content-Length: " + std::to_string(file_data.length()) + \
@@ -158,10 +160,11 @@ Server *Response::server_availabe(ParserConfig config, Request req)
 	it = servers.begin();
 	while (it != servers.end())
 	{
-		std::cout << (*it)->getHost() << std::endl;
 		if ((*it)->getPort() == std::stoul(req.getPort()) && \
 		(*it)->getHost() == req.getHost())
+		{
 			return (*it);
+		}
 		it++;
 	}
 	return NULL;
@@ -182,7 +185,7 @@ void Response::make_response(ParserConfig config, Request req)
 	//check if server is availble?
 	path_assembling_n_check(serv, &req);
 	//check if req failures arrived
-	if (req.getRespStatus() != 200)
+	if (req.getRespStatus() != 200 && req.getRespStatus() != 301)
 		return make_err_resp(serv, req);
 	execute(req, serv);
 }

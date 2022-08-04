@@ -76,7 +76,7 @@ ParserConfig::ParserConfig(char *pathConfig) {
                         servers[i]->setServerNames(strtok(NULL, " \t\v;"));
                     } else if (!strcmp(word, "location")) {
                         char *path = strtok(NULL, " \t\v");
-                        servers[i]->setLocation(path, new Location);
+						servers[i]->setLocation(path, new Location);
                         if (!strcmp(strtok(NULL, " \t\v;"), "{"))
                             while (parserLocation(strtok(NULL, " \t\v;"), servers[i]->getLocation(path))) {}
                         else

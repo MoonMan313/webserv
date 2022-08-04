@@ -14,6 +14,7 @@ Server::Server() {
     root = "";
     limitBodySize = 0;
     cgi = "";
+	currLocation = NULL;
 }
 
 const std::string &Server::getHost() const {
@@ -24,6 +25,11 @@ unsigned int Server::getPort() const {
     return port;
 }
 
+Location *Server::getCurrLocation(void)
+{
+	return (this->currLocation);
+}
+
 const std::string &Server::getServerNames() const {
     return serverNames;
 }
@@ -32,6 +38,11 @@ void Server::setHost(const std::string &host)
 {
 	std::cout << "HOST IS:" << host << std::endl;
     Server::host = host;
+}
+
+void Server::setCurrLocation(Location *loc)
+{
+	this->currLocation = loc;
 }
 
 void Server::setPort(unsigned int port) {
@@ -46,9 +57,11 @@ void Server::setLocation(char *first, Location *second) {
     Server::location[first] = second;
 }
 
-Location *Server::getLocation(const char *path) {
+Location *Server::getLocation(const char *path)
+{
     std::map<std::string, Location *>::iterator it;
-    it = location.find(path);
+
+	it = location.find(path);
     if (it != location.end())
         return it->second;
     return NULL;

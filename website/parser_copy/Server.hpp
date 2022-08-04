@@ -19,7 +19,7 @@ protected:
     std::string host;
     unsigned int port;
     std::string serverNames;
-
+	Location* currLocation;
     std::map<std::string, Location *> location;
 public:
     Location *getLocation(const char *path);
@@ -31,7 +31,11 @@ public:
     unsigned int getPort() const;
 
     const std::string &getServerNames() const;
-    
+
+	Location *getCurrLocation(void);
+
+	void setCurrLocation(Location* loc);
+
     void setHost(const std::string &host);
 
     void setPort(unsigned int port);
