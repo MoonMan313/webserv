@@ -33,6 +33,7 @@ public:
 	void execute_get(Request req, Server *serv);
 	void execute_post(Request req, Server *serv);
 	void execute_delete(Request req, Server *serv);
+	void execute_put(Request req, Server *serv);
 
 	void make_err_resp(Server *serv, Request req);
 	Server *server_availabe(ParserConfig config, Request req);

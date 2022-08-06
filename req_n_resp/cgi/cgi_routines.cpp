@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 13:20:49 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/07/09 13:01:28 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/05 10:29:20 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <fstream>
 void Cgi::execute(char **env)
 {
-	pid_t		 pid;
+	pid_t		pid;
 	int			saved_out;
 	std::string	temp;
 	char		buffer [100];

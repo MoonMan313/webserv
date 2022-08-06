@@ -33,6 +33,8 @@ int parserLocation(char *word, Location *tmp) {
                 tmp->setMethodsAllowed("POST");
             else if (!strcmp(word, "DELETE"))
                 tmp->setMethodsAllowed("DELETE");
+			else if (!strcmp(word, "PUT"))
+	            tmp->setMethodsAllowed("PUT");
             else
                 throw "Error in configuration file.";
         }

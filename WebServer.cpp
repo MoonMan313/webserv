@@ -1,14 +1,14 @@
 #include "WebServer.hpp"
 
-void    Server::setAddr()
+void    WebServer::setAddr()
 {
     //memset(_addr.sin_zero, '\0', sizeof _addr.sin_zero);
     _addr.sin_family = AF_INET;
-    _addr.sin_port = htons(8000/*getListens().port*/);
+    _addr.sin_port = htons(8070/*getListens().port*/);
     _addr.sin_addr.s_addr = INADDR_ANY /*htonl(getListens().host)*/;
 }
 
-int     Server::setup()
+int     WebServer::setup()
 {
     int fd;
     if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
@@ -23,9 +23,10 @@ int     Server::setup()
     {
         std::cerr << "FCNTL doesn't work" << std::endl; /*throw(); must write exceptions*/
         return (-1);
-    } 
+    }
 
-    this->setAddr();
+	//предполагаю, что тут нужно запустить все доступные серваки из конфига
+    this->setAddr(); // <- CONFIG INSIDE TO LAUNCH ALL SERVERS
 
     if (bind(this->getFd(), (struct sockaddr *)&_addr, sizeof(_addr)) == -1)
     {
@@ -40,14 +41,16 @@ int     Server::setup()
     return (0);
 }
 
-void    Server::connect()
-{   
-    char buf[30000] = {0};
-    char buffer[30000] = {0};
+void    WebServer::connect(ParserConfig config)
+{
+	Request req;
+	Response resp;
+    //char buf[350000] = {0};
+    char buffer[350000] = {0};
     std::set<int> clients;
-    
+
     clients.clear();
-   
+
 
     while(1)
     {
@@ -59,22 +62,21 @@ void    Server::connect()
         for(std::set<int>::iterator it = clients.begin(); it != clients.end(); it++)
             FD_SET(*it, &readset);
 
-
         // Задаём таймаут
         timeval timeout;
         timeout.tv_sec = 160; // was 15
         timeout.tv_usec = 0;
-   
+
         int mx = std::max(this->getFd(), *max_element(clients.begin(), clients.end()));
 
- 
+
         std::cout << "socket max is :  " << mx << std::endl;
         if(select(mx + 1, &readset, NULL, NULL, &timeout) <= 0)
         {
             perror("select");
             exit(3);
         }
-        
+
         int addrlen = sizeof(this->getAddr());
 
         // Определяем тип события и выполняем соответствующие действия
@@ -87,7 +89,7 @@ void    Server::connect()
                 perror("accept");
                 exit(3);
             }
-            
+
             std::cout << "socket_read is :  " << sock << std::endl;
 
             fcntl(sock, F_SETFL, O_NONBLOCK);
@@ -102,7 +104,7 @@ void    Server::connect()
             if(FD_ISSET(*it, &readset))
             {
                 // Поступили данные от клиента, читаем их
-                int bytes_read = recv(*it, buffer, 30000, 0);
+                int bytes_read = recv(*it, buffer, 350000, 0);
 
                 std:: cout << "bytes reads are: " << buffer << std::endl;
                 if(bytes_read <= 0)
@@ -111,8 +113,9 @@ void    Server::connect()
                     close(*it);
                     continue;
                 }
-
-                std::string hello = "HTTP/1.1. 200 OK\n\
+				req.parse_request(buffer);
+				resp.make_response(config, req);
+                /*std::string hello = "HTTP/1.1. 200 OK\n\
 	                                Content-Type: text\n\
 	                                Content-Length: 12\n\n\
 	                                <html>Hello big world!\n\
@@ -124,10 +127,11 @@ void    Server::connect()
                                     <body>\
 	                                </html>";
                 std::string str = buffer;
-                std::cout << str << std::endl << str.substr(0, str.find("\n")) << std::endl;
+                std::cout << str << std::endl << str.substr(0, str.find("\n")) << std::endl;*/
 
                 // Отправляем данные обратно клиенту
-                int send_bytes = send(*it, hello.c_str() , hello.length(), MSG_DONTROUTE);
+                int send_bytes = send(*it, resp.getRespons().c_str(), \
+				resp.getRespons().length(), MSG_DONTROUTE);
                 std:: cout << "send_bytes are: " << send_bytes << std::endl;
                 if (send_bytes == -1)
                 {
@@ -137,7 +141,7 @@ void    Server::connect()
             }
         }
     }
-    
+
 
 }
 

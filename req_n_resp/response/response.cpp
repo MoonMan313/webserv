@@ -13,9 +13,8 @@ void Response::make_err_resp(Server *serv, Request req)
 
 	// check if root is proper now or what?
 	// get root for err page
-	std::cout << "CHECK RESP STATUS " << req.getRespStatus() << "and name: " << serv->getErrorPage(req.getRespStatus()) << std::endl;
 	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + \
-	serv->getErrorPage(req.getRespStatus()) + "\r\n";
+	serv->getErrorPage(req.getRespStatus()) + "\r\n\r\n";
 	/*Content-Transfer-Encoding: binary; \
 	Content-Length: " + std::to_string(file_data.length()) + \
 	"; Accept-Language : " + req.getHeaders()["Accept-Language"] \
@@ -63,23 +62,6 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	this->setRoot(temp_path);
 };
 
-void Response::execute_post(Request req, Server *serv)
-{
-	//status 202 - Accepted status to send in response in case file is accepted
-
-	(void)req;
-	(void)serv;
-
-};
-
-void Response::execute_delete(Request req, Server *serv)
-{
-	//check status with girls video
-	(void)req;
-	(void)serv;
-
-};
-
 int	check_file(std::string filename)
 {
 	FILE	*pFile;
@@ -89,10 +71,34 @@ int	check_file(std::string filename)
 	if (pFile == NULL)
 	{
 		out = -1;
-		std::cout << "getting filedata" << std::endl;
 	}
 	fclose (pFile);
 	return (out);
+};
+
+void Response::execute_put(Request req, Server *serv)
+{
+	(void)serv;
+	std::ofstream file(this->getRoot(), std::ofstream::binary);
+	file.write(req.getBody(), std::stoul(req.getHeaders()["Content-Length"]));
+	file.close();
+	this->setRespons("HTTP/1.1 200 Okay\r\n\r\n");
+};
+
+
+void Response::execute_delete(Request req, Server *serv)
+{
+	//check status with girls video
+	if (check_file(this->getRoot()) != -1)
+	{
+		std::remove(this->getRoot().c_str());
+		this->setRespons("HTTP/1.1 200 Okay\r\n\r\n");
+	}
+	else
+	{
+		req.setRespStatus(404);
+		make_err_resp(serv, req);
+	}
 };
 
 void Response::execute_get(Request req, Server *serv)
@@ -104,7 +110,6 @@ void Response::execute_get(Request req, Server *serv)
 	//check here if file-data is not awailable;
 	if (serv->getCurrLocation()->getRedirection() != "")
 	{
-		std::cout << "HERE" << std::endl;
 		hello = "HTTP/1.1 301 Moved Permanently\r\nLocation : " + \
 		serv->getCurrLocation()->getRedirection() + "\r\n\r\n";
 
@@ -118,7 +123,6 @@ void Response::execute_get(Request req, Server *serv)
 			file_data = get_file_data(this->getRoot(), &req, serv);
 		}
 
-
 		hello = "HTTP/1.1 200 Okay\r\nContent-Transfer-Encoding: binary; \
 		Content-Length: " + std::to_string(file_data.length()) + \
 		"; Accept-Language : " + req.getHeaders()["Accept-Language"] \
@@ -129,16 +133,18 @@ void Response::execute_get(Request req, Server *serv)
 
 void Response::execute(Request req, Server *serv)
 {
-	std::string methods[3];
+	std::string methods[4];
 	int i = -1;
-	void (Response::*f[3])(Request req, Server *serv) = {
+	void (Response::*f[4])(Request req, Server *serv) = {
 		&Response::execute_get,
-		&Response::execute_post,
+		&Response::execute_get,
 		&Response::execute_delete,
+		&Response::execute_put
 	};
 	methods[0] = "GET";
 	methods[1] = "POST";
 	methods[2] = "DELETE";
+	methods[3] = "PUT";
 	while(req.getMethod() != methods[++i]);
 	(this->*f[i])(req, serv);
 };
@@ -168,7 +174,10 @@ void Response::make_response(ParserConfig config, Request req)
 
 	serv = server_availabe(config, req);
 	if (req.getRespStatus() != 200)
+	{
 		return make_err_resp(serv, req);
+	}
+
 	if (check_limit(&req, serv))
 		return make_err_resp(serv, req);
 	if (!serv)

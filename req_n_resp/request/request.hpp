@@ -6,7 +6,7 @@
 /*   By: dmitriyp <dmitriyp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 14:58:20 by dmitriyp          #+#    #+#             */
-/*   Updated: 2022/07/07 22:20:40 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/06 12:59:53 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ private:
 	std::string							_version;
 	std::string							_path;
 	std::string							_path_info;
-	std::string							_body;
+	char								*_body;
 	std::string							_query;
 	std::string							_fragment;
 	std::string							_encoding;
@@ -42,7 +42,7 @@ public:
 	std::string							getPathInfo() const;
 	std::string							getQuery() const;
 	std::string							getFragment() const;
-	std::string							getBody() const;
+	char								*getBody();
 	std::map<std::string, std::string>	getHeaders() const;
 	std::map<std::string, std::string>	getHeadersCgi() const;
 	std::string							getPort() const;
@@ -53,7 +53,7 @@ public:
 	void								setVersion(std::string version);
 	void								setPath(std::string path);
 	void								setPathInfo(std::string path_info);
-	void								setQuery(std::string query);
+	void								setQuery(const char *body);
 	void								setHeaders(std::map<std::string, \
 		std::string> headers);
 	void								setHeadersCgi(std::map<std::string, \
@@ -62,13 +62,13 @@ public:
 	void								setHost(std::string host);
 	void								setRespStatus(int rest_status);
 	void								setFragment(std::string fragment);
-	void								setBody(std::string body);
+	void								setBody(char *body, int size);
 
-	void								parse_request(std::string req);
+	void								parse_request(char *req);
 };
 
-std::string								get_first_line(std::string req);
+std::string								get_first_line(char *req);
 void									first_line_parsing(std::string f_line, \
 	Request *req);
-void									headers_parsing(std::string \
-	headers_line, Request *req);
+void									headers_parsing(char * headers_line, \
+	Request *req);

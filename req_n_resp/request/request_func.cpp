@@ -21,13 +21,27 @@ std::map<std::string, std::string> \
 	return (cgi_headers);
 };
 
-std::map<std::string, std::string>	get_headers(std::string headers_line, \
+std::map<std::string, std::string>	get_headers(char *headers_l, \
 	Request *req)
 {
 	std::map<std::string, std::string>	headers;
 	std::string							key;
 	std::string							value;
 
+	//while(headers_l[i] != '' || )
+	int i = 0;
+	while(headers_l[i])
+	{
+		if (headers_l[i] == '\r' && i > 1) //|| headers_l[i] == '\r')
+			if (headers_l[i - 1] == '\n' && headers_l[i - 2] == '\r')
+			{
+				std::cout << "i for break : " << i << std::endl;
+				break;
+			}
+
+		i++;
+	}
+	std::string	headers_line (headers_l, i + 1);
 	while(headers_line.compare("") != 0 && headers_line.compare("\r\n\r\n") \
 	!= 0 && headers_line[0] != '\r')
 	{
@@ -41,20 +55,30 @@ std::map<std::string, std::string>	get_headers(std::string headers_line, \
 		value = headers_line.substr(headers_line.find(':') + 1, \
 			end_of_line(headers_line) - headers_line.find(':'));
 		trim_str(&value);
+		std::cout << "key: " << key << " and val: " << value << std::endl;
 		headers[key] = value;
 		headers_line.erase(0, end_of_line(headers_line) + 1);
 	}
 	if (headers.count("Content-Length") || headers.count("Transfer-Encoding"))
 	{
-		headers_line.erase(0, end_of_line(headers_line) + 1);
-		req->setBody(headers_line.substr(1));
+		headers_l = headers_l + i + 2;
+		std::cout << "FINALLY BODY before IS:" << headers_l << "<-end" <<std::endl;
+
+		int i = 0;
+		while (i < std::stoi(headers["Content-Length"]) + 10)
+		{
+			std::cout << headers_l[i];
+			i++;
+		}
+		if (headers_l)
+			req->setBody(headers_l, std::stoi(headers["Content-Length"]));
 	}
 	return headers;
 }
 
 //according to the rfc there should be no WS between first line
 // and headers. If it is - such message shall be rejected
-void headers_parsing(std::string headers_line, Request *req)
+void headers_parsing(char *headers_line, Request *req)
 {
 	if (isspace(headers_line[0])) //if zero headers?
 	{
@@ -71,7 +95,6 @@ void headers_parsing(std::string headers_line, Request *req)
 	}
 	else
 		req->setHost(req->getHeaders()["Host"]);
-
 }
 
 void parse_path(Request *req, std::string raw_line)
@@ -85,7 +108,7 @@ void parse_path(Request *req, std::string raw_line)
 	// check query
 	if (raw_line.find('?') != std::string::npos)
 	{
-		req->setQuery(raw_line.substr(raw_line.find('?') + 1));
+		req->setQuery((raw_line.substr(raw_line.find('?') + 1)).c_str());
 		raw_line.erase(raw_line.find('?'));
 	}
 	// check path_info
@@ -147,11 +170,16 @@ void first_line_parsing(std::string f_line, Request *req)
 	check_fl_values(req);
 }
 
-std::string get_first_line(std::string req)
+std::string get_first_line(char *req_line)
 {
 	std::string first_line;
+	int i;
 	int pos;
 
+	i = 0;
+	while(req_line[i] != '\n' && req_line[i])
+		i++;
+	std::string req (req_line, i + 1);
 	//status line end shall be CRLF = /r/n (check w readl web request)
 	pos = req.find('\n');
 	if (pos == -1)

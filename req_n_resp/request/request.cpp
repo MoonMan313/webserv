@@ -6,14 +6,14 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/07/09 11:48:57 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:21:42 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "request.hpp"
 
 Request::Request() :  _resp_status(200), _port("80"), _method(""), \
-_path(""), _path_info(""), _body(""), _query("") {};
+_path(""), _path_info(""), _body(NULL), _query("") {};
 
 Request::~Request(){};
 
@@ -72,7 +72,7 @@ int Request::getRespStatus() const
 	return (this->_resp_status);
 };
 
-std::string Request::getBody() const
+char *Request::getBody()
 {
 	return (this->_body);
 };
@@ -99,8 +99,9 @@ void Request::setPathInfo(std::string path_info)
 	this->_path_info = path_info;
 };
 
-void Request::setQuery(std::string query)
+void Request::setQuery(const char *body)
 {
+	std::string query (body);
 	percent_decoding(&query); // may be failure to devode here as equeal sign could appear inside credentials etc
 	this->_query = query;
 };
@@ -137,18 +138,39 @@ void Request::setRespStatus(int rest_status)
 	this->_resp_status = rest_status;
 };
 
-void Request::setBody(std::string body)
+void Request::setBody(char *body, int size)
 {
-	this->_body = body;
+	std::cout << "\n\nlen is :" << size << std::endl;
+	char body_proper[size];
+	int i = 0;
+	while (i < size)
+	{
+		body_proper[i] = body[i];
+		i++;
+	}
+	//body_proper[i] = '\0';
+	i = 0;
+	this->_body = body_proper;
+
+	while (i < size)
+	{
+		std::cout << this->_body[i];
+		i++;
+	}
+
 };
 
-void Request::parse_request(std::string req)
+void Request::parse_request(char* req)
 {
 	std::string first_line;
 
 	first_line = get_first_line(req);
+	std::cout << first_line << std::endl;
 	first_line_parsing(first_line, this);
 	if (this->_resp_status != 200) return;
-	req.erase(0, first_line.length() + 1);
+	//req.erase(0, first_line.length() + 1);
+	req = req + first_line.length() + 1;
 	headers_parsing(req, this);
+	if (this->_body && this->getMethod() == "POST") // in case of PUT request -> check METHOD here
+		this->setQuery(this->_body);
 	};
