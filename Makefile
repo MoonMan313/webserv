@@ -10,7 +10,7 @@ PR		= website/parser_copy
 
 СС      = с++
 
-SRC_S    =  main.cpp WebServer.cpp $(RNQ)/$(RQ)/request.cpp $(RNQ)/$(RQ)/request_func.cpp \
+SRC_S    =  main.cpp $(RNQ)/$(RQ)/request.cpp $(RNQ)/$(RQ)/request_func.cpp \
 			$(RNQ)/routines.cpp $(RNQ)/$(RS)/response.cpp \
 			$(RNQ)/$(RS)/response_func.cpp $(RNQ)/$(CG)/cgi.cpp \
 			$(RNQ)/$(CG)/cgi_routines.cpp \
@@ -22,7 +22,7 @@ OBJ_S    =   ${SRC_S:.cpp=.o}
 			c++ ${FLAGS} -c $< -o ${<:.cpp=.o}
 
 FLAGS   =   -Wall -Wextra -Werror -I $(RNQ)/headers -I $(RNQ)/$(RS) -I $(RNQ)/$(RQ) \
-			-I $(RNQ)/$(CG) -I $(PR) -I .
+			-I $(RNQ)/$(CG) -I $(PR)
 
 NAME	  =	 webserv
 
