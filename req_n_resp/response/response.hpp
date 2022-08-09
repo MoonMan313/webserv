@@ -3,12 +3,17 @@
 
 # include "ParserConfig.hpp"
 
-#define S_200 "OK"
-
-# define S_400 "Bad Request"
-# define S_405 "405 Method Not Allowed"
-
-# define S_505 "HTTP Version Not Supported"
+# define S200 Okay
+# define S202 Accepted
+# define S206 Partial_contennt
+# define S301 Moved_Permanently
+# define S302 Found
+# define S400 Bad_request
+# define S404 Not_Found
+# define S405 Method_Not_Allowed
+# define S413 Request_Entity_Too_Long
+# define S500 Internal_Server_Error
+# define S505 HTTP_Version_Not_Supported
 
 class Response
 {

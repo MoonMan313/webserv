@@ -10,11 +10,14 @@ void Response::make_err_resp(Server *serv, Request req)
 	//may be this type of logic make no sense due to failure header status
 	std::string hello;
 	std::string status;
-
+	(void)serv;
 	// check if root is proper now or what?
 	// get root for err page
+
 	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + \
-	serv->getErrorPage(req.getRespStatus()) + "\r\n\r\n";
+	"S" + std::to_string(req.getRespStatus()) + "\r\n\r\n";
+
+//	std::cout << " TEST AFTER " << "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " << std::endl;
 	/*Content-Transfer-Encoding: binary; \
 	Content-Length: " + std::to_string(file_data.length()) + \
 	"; Accept-Language : " + req.getHeaders()["Accept-Language"] \

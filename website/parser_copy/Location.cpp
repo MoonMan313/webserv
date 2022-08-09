@@ -42,7 +42,7 @@ std::string Location::getErrorPage(int err_code)
 	    std::cout << "CHECK ERR PAGE" << it->first << " " << it->second << std::endl;
 		return (it->second);
 	}
-	std::cout << "CHECK ERR PAGE FAILED" << std::endl;
+	std::cout << err_code << " CHECK ERR PAGE FAILED" << std::endl;
 	return (NULL);
 }
 
