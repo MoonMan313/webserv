@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/08/06 17:21:42 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/10 21:50:03 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,15 @@ char *Request::getBody()
 };
 
 //SETTERS
-void Request::setMethod(std::string method)
+int Request::setMethod(std::string method)
 {
+	std::string check_methods;
+
+	check_methods = "GET_POST_DELETE_HEAD_PUT_CONNECT_OPTIONS_TRACE";
+	if (check_methods.find(method) == std::string::npos || method == " " || method == "")
+		return 0;
 	this->_method = method;
+	return 1;
 };
 
 void Request::setVersion(std::string version)
@@ -140,7 +146,6 @@ void Request::setRespStatus(int rest_status)
 
 void Request::setBody(char *body, int size)
 {
-	std::cout << "\n\nlen is :" << size << std::endl;
 	char body_proper[size];
 	int i = 0;
 	while (i < size)
@@ -167,10 +172,11 @@ void Request::parse_request(char* req)
 	first_line = get_first_line(req);
 	std::cout << first_line << std::endl;
 	first_line_parsing(first_line, this);
-	if (this->_resp_status != 200) return;
+	//if (this->_resp_status != 200) return ;
 	//req.erase(0, first_line.length() + 1);
 	req = req + first_line.length() + 1;
 	headers_parsing(req, this);
-	if (this->_body && this->getMethod() == "POST") // in case of PUT request -> check METHOD here
-		this->setQuery(this->_body);
+	if (req->getRespStatus() == 200)
+		if (this->_body && this->getMethod() == "POST") // in case of PUT request -> check METHOD here
+			this->setQuery(this->_body);
 	};

@@ -1,23 +1,7 @@
-#include "WebServer.hpp"
+#include "response.hpp"
 #define TRUE             1
 #define FALSE            0
 #define SERVER_PORT 8070
-int test(int argc, char **argv)
-{
-    WebServer test;
-
-	if (argc > 2)
-	{
-		std::cout << "Enter one configuration file." << std::endl;
-		return 0;
-	}
-	ParserConfig config(argv[1]);
-
-    test.setup();
-    test.connect(config);
-    test.close_fds();
-    return 0;
-}
 
 int main (int argc, char **argv)
 {
@@ -63,7 +47,8 @@ if (rc < 0)
     close(listen_sd);
     exit(-1);
 }*/
-if (fcntl(listen_sd, F_SETFL, O_NONBLOCK) < 0)
+int listen_new = fcntl(listen_sd, F_SETFL, O_NONBLOCK);
+if (listen_new < 0)
 {
    std::cerr << "FCNTL doesn't work" << std::endl;
    return (-1);
@@ -158,7 +143,7 @@ if (fcntl(listen_sd, F_SETFL, O_NONBLOCK) < 0)
         close_conn = FALSE;
         while(TRUE)
         {
-			if (fds[i].revents == POLLIN)
+			if (fds[i].revents & POLLIN)
 			{
 				std::cout << "IM GETTING INSIDE and i is" << i << std::endl;
 				rc = recv(fds[i].fd, buffer, sizeof(buffer), 0);
@@ -167,16 +152,6 @@ if (fcntl(listen_sd, F_SETFL, O_NONBLOCK) < 0)
 				req.parse_request(buffer);
 				resp.make_response(config, req);
 
-				if (rc < 0)
-				{
-					if (errno != EWOULDBLOCK)
-					{
-						perror("  recv() failed");
-						close_conn = TRUE;
-					}
-					errno = 0;
-					break;
-				}
 				if (rc == 0)
 				{
 					std::cout << "Connection closed" << std::endl;
@@ -186,10 +161,9 @@ if (fcntl(listen_sd, F_SETFL, O_NONBLOCK) < 0)
 				len = rc;
 
 				//fds[i].revents = 0;
-				fds[i].revents = POLLOUT;
+				fds[i].revents = POLLOUT; // if recv is over -> else stay on
 				std::cout << std::to_string(len) << "bytes received" << std::endl;
 			}
-
 			if (fds[i].revents == POLLOUT)
 			{
 				  		   // // Отправляем данные обратно клиенту
@@ -204,10 +178,10 @@ if (fcntl(listen_sd, F_SETFL, O_NONBLOCK) < 0)
 				}
 				//fds[i].revents = 0;
 				//fds[i].events = 0;
-				close_conn = TRUE;
-				fds[i].revents = 0;
-				break;
+				//close_conn = TRUE;
+				fds[i].revents = 0; //if send is not over repeat send
 			}
+			break;
 		}
 		if (close_conn)
 		{

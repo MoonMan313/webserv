@@ -38,7 +38,6 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 				std::cout << "i for break : " << i << std::endl;
 				break;
 			}
-
 		i++;
 	}
 	std::string	headers_line (headers_l, i + 1);
@@ -81,10 +80,7 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 void headers_parsing(char *headers_line, Request *req)
 {
 	if (isspace(headers_line[0])) //if zero headers?
-	{
-		req->setRespStatus(400);
-		return ;
-	}
+		req->setRespStatus(400); //moved return from here to try to recogmnize host and port
 	req->setHeaders(get_headers(headers_line, req));
 	req->setHeadersCgi(cgi_headers(req->getHeaders()));
 	if (req->getHeaders()["Host"].find(':') != std::string::npos)
@@ -124,26 +120,20 @@ void parse_path(Request *req, std::string raw_line)
 
 void check_fl_values(Request *req)
 {
-	std::string check_methods;
-
-	check_methods = "GET_POST_DELETE_HEAD_PUT_CONNECT_OPTIONS_TRACE";
-	//check if method is proper
-	if (check_methods.find(req->getMethod()) == std::string::npos)
-	{
-		req->setRespStatus(405);
-		return ;
-	}
 	//HTTP-name "/" DIGIT "." DIGIT
-	if (req->getVersion().find("HTTP/") == std::string::npos)
-		req->setRespStatus(400);
-	else if (req->getVersion().length() != 8)
-		req->setRespStatus(400);
-	else if (req->getVersion().find(".") != 6)
-		req->setRespStatus(400);
-	else if (!isdigit(req->getVersion()[5]) || !isdigit(req->getVersion()[7]))
-		req->setRespStatus(400);
-	else if (req->getVersion()[5] != '0' && req->getVersion()[5] != '1')
-		req->setRespStatus(505);
+	if (req->getRespStatus() == 200)
+	{
+		if (req->getVersion().find("HTTP/") == std::string::npos)
+			req->setRespStatus(400);
+		else if (req->getVersion().length() != 8)
+			req->setRespStatus(400);
+		else if (req->getVersion().find(".") != 6)
+			req->setRespStatus(400);
+		else if (!isdigit(req->getVersion()[5]) || !isdigit(req->getVersion()[7]))
+			req->setRespStatus(400);
+		else if (req->getVersion()[5] != '0' && req->getVersion()[5] != '1')
+			req->setRespStatus(505);
+	}
 };
 
 //according to rfc normal request first line should be splitted by WS
@@ -157,8 +147,7 @@ void first_line_parsing(std::string f_line, Request *req)
 	req->setRespStatus(400);
 	temp << f_line;
 	getline(temp, s, ' ');
-	req->setMethod(s);
-	if (temp.eof()) return;
+	if (temp.eof() || !(req->setMethod(s))) return;
 	getline(temp, s, ' ');
 	if (temp.eof()) return;
 	parse_path(req, s);

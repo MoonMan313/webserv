@@ -6,7 +6,7 @@
 /*   By: dmitriyp <dmitriyp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 14:58:20 by dmitriyp          #+#    #+#             */
-/*   Updated: 2022/08/06 12:59:53 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:43:34 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ public:
 	std::string							getHost() const;
 	int									getRespStatus() const;
 	//setters
-	void								setMethod(std::string method);
+	int									setMethod(std::string method);
 	void								setVersion(std::string version);
 	void								setPath(std::string path);
 	void								setPathInfo(std::string path_info);
