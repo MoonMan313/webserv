@@ -2,7 +2,11 @@
 
 Iosock::Iosock(){};
 
-Iosock::Iosock(int fd) : _fd(fd) {};
+Iosock::Iosock(int fd)
+{
+	_fd = fd;
+	fcntl(_fd, F_SETFL, O_NONBLOCK);
+};
 
 //mb some remove actions here
 Iosock::~Iosock(){};
@@ -18,24 +22,34 @@ std::string Iosock::get_message()
 	return (out);
 };
 
-void Iosock::read_message()
+int Iosock::read_message()
 {
-	char			buffer[3000];
-	std::string		str;
+	char				buffer[3000];
+	std::stringstream	str;
 	int				rc;
 
-	rc = recv(this->_fd, buffer, sizeof(buffer) - 1, 0);
-	buffer[rc] = '\0';
+	while((rc = recv(this->_fd, buffer, sizeof(buffer) - 1, 0) > 0)
+	{
+		if (rc > 0)
+		{
+			std::cout << "pushing to _msg" << std::endl;
+			buffer[rc] = '\0';
+			str = buffer;
+			this->_msgs.push(str);
+		}
+	}
+
 	std::cout << "recv here done and rc " << rc << std::endl;
 	//should  be different and in connection to fd may  be
 	//req.parse_request(buffer);
 	//resp.make_response(config, req);
-	str = buffer;
-	this->_msgs.push(str);
+
+
 	if (rc == 0)
 	{
 		std::cout << "Connection will be closed" << std::endl;
 		//close_conn = TRUE;
 	//	break;
 	}
+	return (rc);
 }

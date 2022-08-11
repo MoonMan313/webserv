@@ -70,6 +70,18 @@ int vec_search(std::vector<int> sockets, int val)
 	return 0;
 }
 
+std::string make_response(std::string str, ParserConfig config)
+{
+	Request req;
+	Response resp;
+
+	req.parse_request((char *)str.c_str());
+	std::cout << "STATUS is " << req.getRespStatus() << std::endl;
+	resp.make_response(config, req);
+	std::cout << "get resp" << resp.getRespons() << std::endl;
+	return (resp.getRespons());
+};
+
 std::vector<int> get_listen_ss(ParserConfig config)
 {
 	std::vector<int> out;
@@ -106,9 +118,6 @@ int accept_sckt(int fd)
 
 int main (int argc, char **argv)
 {
-	Request req;
-	Response resp;
-
 	int				new_sd = -1;
 	int				compress_array = FALSE;
 	int				close_conn;
@@ -119,6 +128,7 @@ int main (int argc, char **argv)
 
 	std::vector<int> listen_ss;
 	std::map<int, Iosock *> io_ss;
+	std::string resp;
 
 	if (argc > 2)
 	{
@@ -170,44 +180,25 @@ int main (int argc, char **argv)
 					{
 						std::cout << "Descriptor "<< std::to_string(fds[i].fd) << " is readable" << std::endl;
 						close_conn = FALSE;
-						io_ss[fds[i].fd ]->read_message();
-						if (io_ss[fds[i].fd ]->empty_sock() != 0)
-						{
-							io_ss[fds[i].fd ]->get_message();
-						}
-
-						/*rc = recv(fds[i].fd, buffer, sizeof(buffer), 0);
-						std::cout << "recv here done and rc " << rc << std::endl;
-						//should  be different and in connection to fd may  be
-						//req.parse_request(buffer);
-						//resp.make_response(config, req);
-						std::cout << "rc after " << rc << std::endl;
-						if (rc == 0)
-						{
-							std::cout << "Connection closed" << std::endl;
+						if (io_ss[fds[i].fd]->read_message() <= 0)
 							close_conn = TRUE;
-							break;
-						}
-						len = rc;*/
-
-						//fds[i].revents = 0;
-
-						std::string resp_check = "Hello sir";
-						std::string hello =  "HTTP/1.1 200 Okay\r\nContent-Length: " + std::to_string(resp_check.length()) + \
-						";"+ "\r\n\r\n" + resp_check;
-						std::cout << "sendinn...." << std::endl;
-						int rc = send(fds[i].fd, hello.c_str(), hello.length(), 0);
-					//	int rc = send(fds[i].fd, resp.getRespons().c_str(), \
-					//		resp.getRespons().length(), 0);
-						if (rc < 0)
+						std::cout << "emprty? " << io_ss[fds[i].fd]->empty_sock() << std::endl;
+						if (io_ss[fds[i].fd]->empty_sock() == 0 && \
+							close_conn == FALSE)
 						{
-							std::cout << "RC IS MINUS" << std::endl;
-							perror("");
-							close_conn = TRUE;
-							break;
+							resp = make_response(io_ss[fds[i].fd]->get_message(), \
+								config);
+							int rc = send(fds[i].fd, resp.c_str(), resp.length(), 0);
+							if (rc < 0)
+							{
+								std::cout << "RC IS MINUS" << std::endl;
+								perror("");
+								close_conn = TRUE;
+								break;
+							}
+							//close_conn = TRUE;
 						}
 						//fds[i].revents = 0; //if send is not over repeat send
-
 						if (close_conn)
 						{
 							std::cout << "ceaning proc started on " << i << "and fd: " << fds[i].fd << std::endl;

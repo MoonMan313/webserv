@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/08/11 11:10:03 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/11 21:51:57 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ void Request::parse_request(char* req)
 {
 	std::string first_line;
 
-	first_line = get_first_line(req);
+ 	first_line = get_first_line(req);
 	std::cout << first_line << std::endl;
 	first_line_parsing(first_line, this);
 	//if (this->_resp_status != 200) return ;

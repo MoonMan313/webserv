@@ -14,7 +14,7 @@ public:
 	Iosock(int fd);
 	~Iosock();
 	std::string				get_message();
-	void					read_message();
+	int						read_message();
 	void					show();
 
 
