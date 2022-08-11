@@ -6,7 +6,7 @@
 /*   By: dmitriyp <dmitriyp@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 15:21:44 by dmitriyp          #+#    #+#             */
-/*   Updated: 2022/08/08 23:06:40 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/11 16:44:36 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 //containers
 #include <algorithm>
 #include <map>
+#include <queue> 
 #include <stdio.h>
 //parser part
 #include <vector>

@@ -35,7 +35,7 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 		if (headers_l[i] == '\r' && i > 1) //|| headers_l[i] == '\r')
 			if (headers_l[i - 1] == '\n' && headers_l[i - 2] == '\r')
 			{
-				std::cout << "i for break : " << i << std::endl;
+			//	std::cout << "i for break : " << i << std::endl;
 				break;
 			}
 		i++;
@@ -54,14 +54,14 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 		value = headers_line.substr(headers_line.find(':') + 1, \
 			end_of_line(headers_line) - headers_line.find(':'));
 		trim_str(&value);
-		std::cout << "key: " << key << " and val: " << value << std::endl;
+		//std::cout << "key: " << key << " and val: " << value << std::endl;
 		headers[key] = value;
 		headers_line.erase(0, end_of_line(headers_line) + 1);
 	}
 	if (headers.count("Content-Length") || headers.count("Transfer-Encoding"))
 	{
 		headers_l = headers_l + i + 2;
-		std::cout << "FINALLY BODY before IS:" << headers_l << "<-end" <<std::endl;
+		//std::cout << "FINALLY BODY before IS:" << headers_l << "<-end" <<std::endl;
 
 		int i = 0;
 		while (i < std::stoi(headers["Content-Length"]) + 10)

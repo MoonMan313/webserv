@@ -16,7 +16,7 @@ void Response::make_err_resp(Server *serv, Request req)
 
 	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + \
 		"S" + std::to_string(req.getRespStatus()) + \
-		"\r\nConnection : keep-alive;Accept-Language : ""+ "\r\n\r\n";
+		"\r\nConnection : keep-alive;Accept-Language : " + "\r\n\r\n";
 
 //	std::cout << " TEST AFTER " << "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " << std::endl;
 	/*Content-Transfer-Encoding: binary; \
@@ -129,7 +129,7 @@ void Response::execute_get(Request req, Server *serv)
 
 		hello = "HTTP/1.1 200 Okay\r\nContent-Transfer-Encoding: binary; \
 		Content-Length: " + std::to_string(file_data.length()) + \
-		"; Connection : keep-alive;Accept-Language : " + req.getHeaders()["Accept-Language"] \
+		"; Connection : keep-alive; Accept-Language : " + req.getHeaders()["Accept-Language"] \
 		+ " \r\n\r\n" + file_data;
 		this->setRespons(hello);
 	}

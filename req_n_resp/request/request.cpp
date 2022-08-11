@@ -6,7 +6,7 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/08/10 21:50:03 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/11 11:10:03 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void Request::parse_request(char* req)
 	//req.erase(0, first_line.length() + 1);
 	req = req + first_line.length() + 1;
 	headers_parsing(req, this);
-	if (req->getRespStatus() == 200)
+	if (this->getRespStatus() == 200)
 		if (this->_body && this->getMethod() == "POST") // in case of PUT request -> check METHOD here
 			this->setQuery(this->_body);
 	};
