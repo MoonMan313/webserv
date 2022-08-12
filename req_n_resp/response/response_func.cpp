@@ -171,8 +171,11 @@ std::string check_locations(Server *serv, std::string file_extension, \
 			temp_path, serv, req);
 		}
 		else
+		{
+			std::cout << "method no allowed" << std::endl;
 			req->setRespStatus(405);
-			//err page method not allowe
+		}
+
 	}
 	else
 	{

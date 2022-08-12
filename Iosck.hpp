@@ -15,6 +15,8 @@ public:
 	~Iosock();
 	std::string				get_message();
 	int						read_message();
+	int						message_assembled();
+	int						get_transfer_encoding();
 	void					show();
 
 

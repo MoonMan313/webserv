@@ -78,7 +78,7 @@ std::string make_response(std::string str, ParserConfig config)
 	req.parse_request((char *)str.c_str());
 	std::cout << "STATUS is " << req.getRespStatus() << std::endl;
 	resp.make_response(config, req);
-	std::cout << "get resp" << resp.getRespons() << std::endl;
+	//std::cout << "get resp" << resp.getRespons() << std::endl;
 	return (resp.getRespons());
 };
 
@@ -116,6 +116,14 @@ int accept_sckt(int fd)
 	return new_sct;
 }
 
+/*bool	work = true;
+
+void	sigHandler(int signum)
+{
+	(void)signum;
+	work = false;
+}*/
+
 int main (int argc, char **argv)
 {
 	int				new_sd = -1;
@@ -150,6 +158,7 @@ int main (int argc, char **argv)
 	std::cout << "NFDS is: " << nfds << std::endl;
 	timeout = (3 * 60 * 1000);
 	std::cout << "Waiting on poll().." << std::endl;
+	//signal(SIGINT, sigHandler);
 	while (1)
 	{
 		int ret;
@@ -162,7 +171,24 @@ int main (int argc, char **argv)
 			{
 				if(fds[i].revents == 0)
 					continue;
-				if (fds[i].revents & POLLIN)
+				if (fds[i].revents & POLLOUT)
+				{
+					int rc = 1;
+					//while(rc > 0)
+					//{
+					fds[i].events = POLLIN;
+					rc = send(fds[i].fd, resp.c_str(), resp.length(), 0);
+					std::cout << "sending rc bytes: " << rc << "and len is" << resp.length() << std::endl;
+					//	}
+					if (rc < 0)
+					{
+						std::cout << "RC IS MINUS" << std::endl;
+						perror("");
+						close_conn = TRUE;
+						break;
+					}
+				}
+				else if (fds[i].revents & POLLIN)
 				{
 					if (vec_search(listen_ss, fds[i].fd))
 					{
@@ -173,7 +199,6 @@ int main (int argc, char **argv)
 						fds[nfds].events = POLLIN;
 						fds[nfds].revents = 0;
 						nfds++;
-						//fds[i].revents = 0;
 						break;
 					}
 					else
@@ -188,14 +213,22 @@ int main (int argc, char **argv)
 						{
 							resp = make_response(io_ss[fds[i].fd]->get_message(), \
 								config);
-							int rc = send(fds[i].fd, resp.c_str(), resp.length(), 0);
+							fds[i].events = POLLOUT;
+							fds[i].revents = POLLOUT;
+							break;
+							//int rc = 1;
+							//while(rc > 0)
+							//{
+								/*rc = send(fds[i].fd, resp.c_str(), resp.length(), 0);
+								std::cout << "sending rc bytes: " << rc << "and len is" << resp.length() << std::endl;
+						//	}
 							if (rc < 0)
 							{
 								std::cout << "RC IS MINUS" << std::endl;
 								perror("");
 								close_conn = TRUE;
 								break;
-							}
+							}*/
 							//close_conn = TRUE;
 						}
 						//fds[i].revents = 0; //if send is not over repeat send

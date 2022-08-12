@@ -126,9 +126,7 @@ void Response::execute_get(Request req, Server *serv)
 		{
 			file_data = get_file_data(this->getRoot(), &req, serv);
 		}
-
-		hello = "HTTP/1.1 200 Okay\r\nContent-Type: text/html;Content-Length: " + std::to_string(file_data.length()) + \
-		";Connection: keep-alive;Accept-Language: " + req.getHeaders()["Accept-Language"] \
+		hello = "HTTP/1.1 200 Ok\r\nContent-Length: " + std::to_string(file_data.length()) + \
 		+ " \r\n\r\n" + file_data;
 		this->setRespons(hello);
 	}
