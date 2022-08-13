@@ -70,9 +70,12 @@ void apply_referer(Request *req)
 	std::string	temp_path;
 	int			pos;
 
+
 	pos = req->getHeaders()["Referer"].find(req->getPort());
 	temp_path = req->getHeaders()["Referer"].substr(pos + \
 		req->getPort().length());
+	std::cout << "INSIDER " << temp_path << std::endl;
+
 	if (is_file(temp_path))
 		temp_path = temp_path.substr(0, temp_path.rfind("/"));
 	if (temp_path.back() == '/')
@@ -80,6 +83,7 @@ void apply_referer(Request *req)
 	temp_path = temp_path + req->getPath();
 	std::cout << "path w referer: " << temp_path << std::endl;
 	req->setPath(temp_path);
+
 };
 
 int check_method(std::vector<std::string> vec, std::string meth)

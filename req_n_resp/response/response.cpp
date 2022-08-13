@@ -15,14 +15,14 @@ void Response::make_err_resp(Server *serv, Request req)
 	// get root for err page
 
 	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + \
-		"S" + std::to_string(req.getRespStatus()) + \
-		"\r\nConnection : keep-alive;Accept-Language : " + "\r\n\r\n";
+		"Method Not Allowed" + "\r\n\r\n";
 
 //	std::cout << " TEST AFTER " << "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " << std::endl;
 	/*Content-Transfer-Encoding: binary; \
 	Content-Length: " + std::to_string(file_data.length()) + \
 	"; Accept-Language : " + req.getHeaders()["Accept-Language"] \
 	+ " \r\n\r\n" + file_data;*/
+	std::cout << hello << std::endl;
 	this->setRespons(hello);
 };
 
@@ -49,6 +49,7 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	//check referer header in case is necessary to assemble path acc to it
 	if (req->getHeaders()["Referer"] != "")	// \ && !is_file(req->getHeaders()["Referer"]))
 		apply_referer(req);
+	//std::cout << "path is " << req->getPath() << "adn " << req->getHeaders()["Referer"]  << std::endl;
 	temp_path = "/";
 	slash_pos = slash_or_end(req->getPath());
 	std::cout << "slash: " << slash_pos << std::endl;
@@ -61,7 +62,6 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 		temp_path = req->getPath().substr(0, slash_pos);
 	//here temp path should be compared w server ROOT field where file extension or folder name shall be searched
 	temp_path = check_locations(serv, file_extension, temp_path, req);
-	std::cout << "temp root to file is :" << temp_path << "<-" << std::endl;
 	// redirection happenns here
 	this->setRoot(temp_path);
 };
@@ -173,7 +173,6 @@ Server *Response::server_availabe(ParserConfig config, Request req)
 void Response::make_response(ParserConfig config, Request req)
 {
 	Server *serv;
-
 	serv = server_availabe(config, req);
 	if (req.getRespStatus() != 200)
 		return make_err_resp(serv, req);

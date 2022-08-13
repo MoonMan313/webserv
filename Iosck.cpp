@@ -30,26 +30,30 @@ std::string Iosock::get_message()
 int	Iosock::get_transfer_encoding()
 {
 	int chunk_start;
-	int chunk_size_int;
 	std::string chunk_size;
+	int chunk_int;
 
 	chunk_start = _current_message.find("\r\n\r\n") + 4;
+	//if (chunk_start == (int)_current_message.find("0\r\n\r\n"))
 	if (chunk_start < (int)_current_message.length())
 	{
-		if (_current_message.find("\r\n", chunk_start) != std::string::npos)
+		while (_current_message.find("\r\n", chunk_start) != std::string::npos)
 		{
 			chunk_size = _current_message.substr(chunk_start, \
-				_current_message.find("\r\n",chunk_start));
-			chunk_size_int = std::stol(chunk_size, NULL, 16);
+				_current_message.find("\r\n",chunk_start) - chunk_start);
+			//std::cout << "chunk size is here :" << chunk_size << std::endl;
+			chunk_int = std::stol(chunk_size, NULL, 16);
+			if (chunk_int  == 0)
+			{
+				std::cout << "here" << std::endl;
+				_current_message.erase(chunk_start);
+				return (1);
+			}
 			_current_message.erase(chunk_start, _current_message.find("\r\n", \
 			chunk_start) + 2 - chunk_start);
-			std::cout << "We check the end of the chunk :" << _current_message[chunk_start + chunk_size_int] << std::endl;
-		}
-		//check if all chuncks assembled
-		if (_current_message.find("0\r\n\r\n"))
-		{
-			_current_message.erase(_current_message.find("0\r\n\r\n"),5);
-			return (1);
+			std::cout << "We check the end of the chunk :" << _current_message[chunk_start + chunk_int] << std::endl;
+			chunk_start += chunk_int;
+			std::cout << "len is :" << _current_message.length() << " and pos :" << chunk_start << std::endl;
 		}
 	}
 
@@ -109,7 +113,6 @@ int Iosock::read_message()
 	_current_message += temp;
 	if (message_assembled())
 	{
-		std::cout << "me insife" << std::endl;
 		this->_msgs.push(_current_message); // do if message has is ready
 		//do necessary changes to curr_msg
 		_current_message = "";

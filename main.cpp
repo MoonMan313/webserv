@@ -173,13 +173,16 @@ int main (int argc, char **argv)
 					continue;
 				if (fds[i].revents & POLLOUT)
 				{
-					int rc = 1;
+					int rc;
 					//while(rc > 0)
 					//{
-					fds[i].events = POLLIN;
+
 					rc = send(fds[i].fd, resp.c_str(), resp.length(), 0);
 					std::cout << "sending rc bytes: " << rc << "and len is" << resp.length() << std::endl;
 					//	}
+					if (rc < (int)resp.length())
+						break;
+					fds[i].events = POLLIN;
 					if (rc < 0)
 					{
 						std::cout << "RC IS MINUS" << std::endl;
@@ -207,7 +210,6 @@ int main (int argc, char **argv)
 						close_conn = FALSE;
 						if (io_ss[fds[i].fd]->read_message() <= 0)
 							close_conn = TRUE;
-						std::cout << "emprty? " << io_ss[fds[i].fd]->empty_sock() << std::endl;
 						if (io_ss[fds[i].fd]->empty_sock() == 0 && \
 							close_conn == FALSE)
 						{
@@ -216,20 +218,6 @@ int main (int argc, char **argv)
 							fds[i].events = POLLOUT;
 							fds[i].revents = POLLOUT;
 							break;
-							//int rc = 1;
-							//while(rc > 0)
-							//{
-								/*rc = send(fds[i].fd, resp.c_str(), resp.length(), 0);
-								std::cout << "sending rc bytes: " << rc << "and len is" << resp.length() << std::endl;
-						//	}
-							if (rc < 0)
-							{
-								std::cout << "RC IS MINUS" << std::endl;
-								perror("");
-								close_conn = TRUE;
-								break;
-							}*/
-							//close_conn = TRUE;
 						}
 						//fds[i].revents = 0; //if send is not over repeat send
 						if (close_conn)

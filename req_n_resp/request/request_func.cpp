@@ -30,6 +30,7 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 
 	//while(headers_l[i] != '' || )
 	int i = 0;
+	std::cout << "HI HEADERS" << std::endl;
 	while(headers_l[i])
 	{
 		if (headers_l[i] == '\r' && i > 1) //|| headers_l[i] == '\r')
@@ -62,16 +63,15 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 	{
 		headers_l = headers_l + i + 2;
 		//std::cout << "FINALLY BODY before IS:" << headers_l << "<-end" <<std::endl;
-
-		int i = 0;
-		while (i < std::stoi(headers["Content-Length"]) + 10)
+		std::string temp = headers_l;
+		std::cout << "BODY LEN " << headers_l << std::endl;
+		if (temp.length())
 		{
-			std::cout << headers_l[i];
-			i++;
+			if (headers.count("Content-Length"))
+				req->setBody(headers_l, std::stoi(headers["Content-Length"]));
+			// for Transef_Encoding - check how
 		}
-		if (headers_l)
-			req->setBody(headers_l, std::stoi(headers["Content-Length"]));
-	}
+}
 	return headers;
 }
 
