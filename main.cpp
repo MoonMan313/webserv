@@ -172,6 +172,11 @@ int main (int argc, char **argv)
 					if (rc < (int)resp.length())
 						break;
 					fds[i].events = POLLIN;
+					if (rc == 0)
+					{
+						close_conn = TRUE;
+						break;
+					}
 					if (rc < 0)
 					{
 						std::cout << "RC IS MINUS" << std::endl;
