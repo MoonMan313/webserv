@@ -31,12 +31,19 @@ std::vector<int> get_chunk_size(int start, std::vector<char> vec)
 {
 	int			chunk_size;
 	int			end_num_pos;
-	std::string	temp;
 	std::vector<int> out;
+	std::string	temp;
+	std::vector<char>::iterator it;
 
-	end_num_pos = start - 1;
-	while(vec.at(++end_num_pos) != '\r')
-		temp.push_back(vec.at(end_num_pos));
+	it = vec.begin();
+	end_num_pos = start;// - 1;
+	it += start;
+	while(*(it) != '\r')
+	{
+		temp.push_back(*it);
+		it++;
+		end_num_pos++;
+	}
 	end_num_pos += 2;
 	chunk_size = std::stol(temp, NULL, 16);
 	out.push_back(end_num_pos);
@@ -51,8 +58,11 @@ int	Iosock::get_transfer_encoding()
 //	std::string chunk_size;
 	int chunk_int;
 	std::vector<char>::iterator it;
+	std::vector<int> bound;
 	size_t pos;
+	std::vector<char> temp_arr;
 
+	temp_arr.reserve(100000000);
 	if (this->_input_vec.size() > 4)
 	{
 		pos = _input_vec.size() - 1;
@@ -63,7 +73,7 @@ int	Iosock::get_transfer_encoding()
 			{
 			//find body part
 			pos = 4;
-			std::cout <<  "CURR IS " << _current_message << std::endl;
+			// std::cout <<  "CURR IS " << _current_message << std::endl;
 			while (++pos < _input_vec.size())
 			{
 				if(_input_vec.at(pos) == '\n')
@@ -78,22 +88,40 @@ int	Iosock::get_transfer_encoding()
 							break ;
 						}
 			}
-			it = _input_vec.begin();
+			int i = -1;
+			while(++i < (int)pos)
+				temp_arr.push_back(_input_vec[i]);
+			//it_src = _input_vec.begin();
+			int tmp_chmk;
 			while(1)
 			{
+			//	it_copy = temp_arr.begin();
 				//check chunk size
-				chunk_int = get_chunk_size(pos, _input_vec).at(1);
+				//it = _input_vec.begin();
+				bound = get_chunk_size(pos, _input_vec);
+				chunk_int = bound[1];//.at(1);
 				std::cout << "CHUNK SIZE IS " << chunk_int << std::endl;
-
-				_input_vec.erase(it + pos, it + get_chunk_size(pos, _input_vec).at(0));
+				i = bound[0];
 				pos += chunk_int;
-				//fo check
-				if (_input_vec.at(pos) != '\r')
-					std::cout << "MIMOMIMO" << std::endl;
-				_input_vec.erase(it + pos, it + pos + 2);
+				tmp_chmk = chunk_int;
+				it = _input_vec.begin() + i;
+				while (tmp_chmk)
+				{
+					temp_arr.push_back(*it);//_input_vec[i]);
+					i++;
+					it++;
+					tmp_chmk--;
+				}
+				pos = i + 2;
+
 				if (chunk_int == 0)
 				{
+					_input_vec.clear();
 					_current_message.clear();
+					temp_arr.shrink_to_fit();
+					std::cout << "SIZE " << temp_arr.size() << std::endl;
+ 					_input_vec = temp_arr;
+					it = _input_vec.begin();
 					while(it != _input_vec.end())
 					{
 						_current_message.push_back(*it);
@@ -179,7 +207,6 @@ int	Iosock::message_assembled()
 			}
 			return (0);
 		}
-		std::cout << "ASSEMBLED" << "\n" << _current_message << std::endl;
 		return (1);
 	}
 	return (0);
@@ -187,12 +214,12 @@ int	Iosock::message_assembled()
 
 int Iosock::read_message()
 {
-	char				buffer[3000];
+	char				buffer[300000];
 	std::stringstream	ss;
 	int					rc;
 
 
-	rc = recv(this->_fd, buffer, 2999, 0);
+	rc = recv(this->_fd, buffer, 299999, 0);
 	buffer[rc] = '\0';
 	ss << buffer;
 
@@ -212,7 +239,6 @@ int Iosock::read_message()
 	_current_message += temp;
 	if (message_assembled())
 	{
-		std::cout << "FINAL REQ IS :\n" << _current_message << std::endl;
 		this->_msgs.push(_current_message); // do if message has is ready
 		//do necessary changes to curr_msg
 		_current_message.clear();

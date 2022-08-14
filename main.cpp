@@ -70,7 +70,7 @@ int vec_search(std::vector<int> sockets, int val)
 	return 0;
 }
 
-std::string make_response(Iosock *io_ss, ParserConfig config)
+std::string make_response_2(Iosock *io_ss, ParserConfig config)
 {
 	Request req;
 	Response resp;
@@ -80,8 +80,7 @@ std::string make_response(Iosock *io_ss, ParserConfig config)
 	req.parse_request(str, io_ss->get_vector());
 	std::cout << "STATUS is " << req.getRespStatus() << std::endl;
 	resp.make_response(config, req);
-	std::cout << "can't get resp" << std::endl;
-	std::cout << "get resp" << resp.getRespons() << std::endl;
+	//std::cout << "get resp" << resp.getRespons() << std::endl;
 	return (resp.getRespons());
 };
 
@@ -151,7 +150,7 @@ int main (int argc, char **argv)
 	std::cout << "NFDS is: " << nfds << std::endl;
 	timeout = (3 * 60 * 1000);
 	std::cout << "Waiting on poll().." << std::endl;
-	//signal(SIGINT, sigHandler);
+	signal(SIGPIPE, SIG_IGN);
 	while (1)
 	{
 		int ret;
@@ -196,14 +195,14 @@ int main (int argc, char **argv)
 					}
 					else
 					{
-						std::cout << "Descriptor "<< std::to_string(fds[i].fd) << " is readable" << std::endl;
+				//		std::cout << "Descriptor "<< std::to_string(fds[i].fd) << " is readable" << std::endl;
 						close_conn = FALSE;
 						if (io_ss[fds[i].fd]->read_message() <= 0)
 							close_conn = TRUE;
 						if (io_ss[fds[i].fd]->empty_sock() == 0 && \
 							close_conn == FALSE)
 						{
-							resp = make_response(io_ss[fds[i].fd], \
+							resp = make_response_2(io_ss[fds[i].fd], \
 								config);
 							fds[i].events = POLLOUT;
 							fds[i].revents = POLLOUT;

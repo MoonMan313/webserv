@@ -33,8 +33,8 @@ void Response::make_err_resp(Server *serv, Request req)
 		_err_pages[req.getRespStatus()] + "\r\nContent-Length: " +  \
 		std::to_string(err_response.length()) + \
 		+ " \r\n\r\n" + err_response;
-	//if (req.getMethod() == "HEAD")
-	//	hello = "HTTP/1.1 405 Method Not Allowed\r\n\r\n";
+	if (req.getMethod() == "HEAD")
+		hello = "HTTP/1.1 405 Method Not Allowed\r\n\r\n";
 	this->setRespons(hello);
 };
 
@@ -97,6 +97,9 @@ int	check_file(std::string filename)
 void Response::execute_put(Request req, Server *serv)
 {
 	(void)serv;
+	std::string hello;
+	std::string reply;
+
 	std::cout << "I TYR TO PUT" << std::endl;
 	std::ofstream file(this->getRoot(), std::ofstream::binary);
 	if (!req.getHeaders()["Content-Length"].empty() || \
@@ -104,7 +107,11 @@ void Response::execute_put(Request req, Server *serv)
 		file.write(req.getBodyPut().data(), req.getBodyPut().size());
 	file.close();
 	std::cout << "DONE" << std::endl;
-	this->setRespons("HTTP/1.1 201 Created\r\n\r\n");
+	reply  = "we got you file baby";
+	hello = "HTTP/1.1 201 Created\r\nContent-Length: " +  \
+	std::to_string(reply.length()) + \
+	+ " \r\n\r\n" + reply;
+	this->setRespons(hello);
 };
 
 
