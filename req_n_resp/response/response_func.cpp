@@ -102,6 +102,7 @@ int check_method(std::vector<std::string> vec, std::string meth)
 
 int method_allowed(Server *serv, char const *loc_name, Request *req)
 {
+	std::cout << "here " << loc_name << " " << req->getMethod() << std::endl;
 	if (!serv->getLocation(loc_name)->getMethodsAllowed().empty())
 	{
 		if (check_method(serv->getLocation(loc_name)->getMethodsAllowed(), req->getMethod()))
@@ -126,6 +127,12 @@ std::string define_file_for_root(std::string temp_root, \
 	while (temp_root.find("//") != std::string::npos)
 	{
 		temp_root.erase(temp_root.find("//"), 1);
+	}
+	std::cout << "intermid temp root is " << temp_root << std::endl;
+	if (!(is_file(temp_root)) && !temp_root.empty())
+	{
+		if (temp_root.back() != '/' && req->getMethod() != "PUT")
+			temp_root.push_back('/');
 	}
 	if (!(is_file(temp_root)) && temp_root.find("cgi_tester") == \
 		std::string::npos)
@@ -154,19 +161,21 @@ std::string check_locations(Server *serv, std::string file_extension, \
 				"/cgi_tester"), temp_path, serv, req);
 		}
 		else
+		{
+			std::cout << "meth not ALLOWED" << std::endl;
 			req->setRespStatus(405);
+		}
 			//err page method not allowed
 	}
 	else if (serv->getLocation(temp_path.c_str()) != NULL)
 	{
-		std::cout << "here" << std::endl;
+
 		serv->setCurrLocation(serv->getLocation(temp_path.c_str()));
 		if (method_allowed(serv, temp_path.c_str(), req))
 		{
 			// define path
 			if (serv->getCurrLocation()->getRedirection() != "")
 			{
-				std::cout << "here" << std::endl;
 				req->setRespStatus(301);
 				return serv->getCurrLocation()->getRedirection();
 			}
@@ -176,7 +185,6 @@ std::string check_locations(Server *serv, std::string file_extension, \
 		}
 		else
 		{
-			std::cout << "method no allowed" << std::endl;
 			req->setRespStatus(405);
 		}
 

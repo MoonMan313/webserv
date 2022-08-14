@@ -21,7 +21,7 @@ std::map<std::string, std::string> \
 	return (cgi_headers);
 };
 
-std::map<std::string, std::string>	get_headers(char *headers_l, \
+std::map<std::string, std::string>	get_headers(std::string headers_l, \
 	Request *req)
 {
 	std::map<std::string, std::string>	headers;
@@ -41,7 +41,7 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 			}
 		i++;
 	}
-	std::string	headers_line (headers_l, i + 1);
+	std::string	headers_line = headers_l.substr(0, i + 1);//(headers_l, i + 1);
 	while(headers_line.compare("") != 0 && headers_line.compare("\r\n\r\n") \
 	!= 0 && headers_line[0] != '\r')
 	{
@@ -61,23 +61,24 @@ std::map<std::string, std::string>	get_headers(char *headers_l, \
 	}
 	if (headers.count("Content-Length") || headers.count("Transfer-Encoding"))
 	{
-		headers_l = headers_l + i + 2;
-		//std::cout << "FINALLY BODY before IS:" << headers_l << "<-end" <<std::endl;
-		std::string temp = headers_l;
-		std::cout << "BODY LEN " << headers_l << std::endl;
+		//headers_l = headers_l + i + 2;
+		//std::cout << "FINALLY before IS:" << headers_l << "<-end" <<std::endl;
+		std::string temp = headers_l.erase(0, i + 2);
+		//std::cout << "BODY LEN " << headers_l << std::endl;
 		if (temp.length())
 		{
+			//apply here vector woth pr
 			if (headers.count("Content-Length"))
-				req->setBody(headers_l, std::stoi(headers["Content-Length"]));
+				req->setBody(headers_l);//, std::stoi(headers["Content-Length"]));
 			// for Transef_Encoding - check how
 		}
-}
+	}
 	return headers;
 }
 
 //according to the rfc there should be no WS between first line
 // and headers. If it is - such message shall be rejected
-void headers_parsing(char *headers_line, Request *req)
+void headers_parsing(std::string headers_line, Request *req)
 {
 	if (isspace(headers_line[0])) //if zero headers?
 		req->setRespStatus(400); //moved return from here to try to recogmnize host and port
@@ -159,16 +160,27 @@ void first_line_parsing(std::string f_line, Request *req)
 	check_fl_values(req);
 }
 
-std::string get_first_line(char *req_line)
+/*std::string get_first_line(std::string req)//char *req_line)
 {
 	std::string first_line;
 	int i;
 	int pos;
+	first_line = req_line;
+
+	std::cout << "BUFFER :" << req_line << std::endl;
+	std::cout << "FL BUFFER :" << first_line << std::endl;
+
+	if (first_line.find('\n') != std::string::npos)
+		first_line = first_line.substr(0, first_line.find('\n'));
+	else
+		first_line = "";
 
 	i = 0;
+
 	while(req_line[i] != '\n' && req_line[i])
 		i++;
 	std::string req (req_line, i + 1);
+	std::cout << "end of fl is " << i << std::endl;
 	//status line end shall be CRLF = /r/n (check w readl web request)
 	pos = req.find('\n');
 	if (pos == -1)
@@ -178,4 +190,4 @@ std::string get_first_line(char *req_line)
 	if (pos != 0)
 		first_line = req.substr(0, pos);
 	return first_line;
-}
+}*/

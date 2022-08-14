@@ -1,28 +1,40 @@
 #include "response.hpp"
 
-Response::Response(){};
+Response::Response(){setErrPages();};
 
 Response::~Response(){};
+
+void Response::setErrPages(void)
+{
+	_err_pages[200] = "Okay";
+	_err_pages[202] = "Accepted";
+	_err_pages[206] = "Partial Content";
+	_err_pages[301] = "Moved Permanently";
+	_err_pages[302] = "Found";
+	_err_pages[400] = "Bad Request";
+	_err_pages[404] = "Not Found";
+	_err_pages[405] = "Method Not Allowed";
+	_err_pages[413] = "Request Entity Too Long";
+	_err_pages[500] = "Internal Server Error";
+	_err_pages[505] = "HTTP Version Not Supported";
+};
 
 //err status making
 void Response::make_err_resp(Server *serv, Request req)
 {
 	//may be this type of logic make no sense due to failure header status
+	std::string err_response;
 	std::string hello;
-	std::string status;
 	(void)serv;
-	// check if root is proper now or what?
-	// get root for err page
 
+	err_response = "ERROR STATUS : " + std::to_string(req.getRespStatus()) + \
+		"\nTHIS IS: " + _err_pages[req.getRespStatus()] + " FAILURE. \nCIAO";
 	hello = "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " + \
-		"Method Not Allowed" + "\r\n\r\n";
-
-//	std::cout << " TEST AFTER " << "HTTP/1.1 " + std::to_string(req.getRespStatus()) + " " << std::endl;
-	/*Content-Transfer-Encoding: binary; \
-	Content-Length: " + std::to_string(file_data.length()) + \
-	"; Accept-Language : " + req.getHeaders()["Accept-Language"] \
-	+ " \r\n\r\n" + file_data;*/
-	std::cout << hello << std::endl;
+		_err_pages[req.getRespStatus()] + "\r\nContent-Length: " +  \
+		std::to_string(err_response.length()) + \
+		+ " \r\n\r\n" + err_response;
+	//if (req.getMethod() == "HEAD")
+	//	hello = "HTTP/1.1 405 Method Not Allowed\r\n\r\n";
 	this->setRespons(hello);
 };
 
@@ -61,8 +73,10 @@ void Response::path_assembling_n_check(Server *serv, Request *req)
 	else
 		temp_path = req->getPath().substr(0, slash_pos);
 	//here temp path should be compared w server ROOT field where file extension or folder name shall be searched
+	std::cout << "temp path" << temp_path << std::endl;
 	temp_path = check_locations(serv, file_extension, temp_path, req);
 	// redirection happenns here
+	std::cout << "temp path after" << temp_path << std::endl;
 	this->setRoot(temp_path);
 };
 
@@ -83,10 +97,14 @@ int	check_file(std::string filename)
 void Response::execute_put(Request req, Server *serv)
 {
 	(void)serv;
+	std::cout << "I TYR TO PUT" << std::endl;
 	std::ofstream file(this->getRoot(), std::ofstream::binary);
-	file.write(req.getBody(), std::stoul(req.getHeaders()["Content-Length"]));
+	if (!req.getHeaders()["Content-Length"].empty() || \
+		!req.getHeaders()["Transfer-Encoding"].empty())
+		file.write(req.getBodyPut().data(), req.getBodyPut().size());
 	file.close();
-	this->setRespons("HTTP/1.1 200 Okay\r\n\r\n");
+	std::cout << "DONE" << std::endl;
+	this->setRespons("HTTP/1.1 201 Created\r\n\r\n");
 };
 
 
@@ -125,10 +143,15 @@ void Response::execute_get(Request req, Server *serv)
 		if (check_file(this->getRoot()) != -1)
 		{
 			file_data = get_file_data(this->getRoot(), &req, serv);
+			hello = "HTTP/1.1 200 Ok\r\nContent-Length: " + std::to_string(file_data.length()) + \
+			+ " \r\n\r\n" + file_data;
+			this->setRespons(hello);
 		}
-		hello = "HTTP/1.1 200 Ok\r\nContent-Length: " + std::to_string(file_data.length()) + \
-		+ " \r\n\r\n" + file_data;
-		this->setRespons(hello);
+		else
+		{
+			req.setRespStatus(404);
+			make_err_resp(serv, req);
+		}
 	}
 };
 
@@ -185,6 +208,7 @@ void Response::make_response(ParserConfig config, Request req)
 	}
 	//check if server is availble?
 	path_assembling_n_check(serv, &req);
+	std::cout << "path is " << req.getPath() << std::endl;
 	//check if req failures arrived
 	if (std::to_string(req.getRespStatus())[0] != '2' && \
 	std::to_string(req.getRespStatus())[0] != '3')

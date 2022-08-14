@@ -6,14 +6,14 @@
 /*   By: gvolibea <gvolibea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 18:10:11 by gvolibea          #+#    #+#             */
-/*   Updated: 2022/08/13 00:31:25 by gvolibea         ###   ########.fr       */
+/*   Updated: 2022/08/14 12:18:57 by gvolibea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "request.hpp"
 
 Request::Request() :  _resp_status(200), _port("80"), _method(""), \
-_path(""), _path_info(""), _body(NULL), _query("") {};
+_path(""), _path_info(""), _body(""), _query("") {};
 
 Request::~Request(){};
 
@@ -72,10 +72,21 @@ int Request::getRespStatus() const
 	return (this->_resp_status);
 };
 
-char *Request::getBody()
+std::string Request::getBody()
 {
 	return (this->_body);
 };
+
+std::vector<char> Request::getInputVec(void)
+{
+	return (this->_input_vec);
+};
+
+std::vector<char> Request::getBodyPut(void)
+{
+	return (this->_body_put);
+};
+
 
 //SETTERS
 int Request::setMethod(std::string method)
@@ -105,9 +116,9 @@ void Request::setPathInfo(std::string path_info)
 	this->_path_info = path_info;
 };
 
-void Request::setQuery(const char *body)
+void Request::setQuery(std::string query)
 {
-	std::string query (body);
+	//std::string query (body);
 	percent_decoding(&query); // may be failure to devode here as equeal sign could appear inside credentials etc
 	this->_query = query;
 };
@@ -144,9 +155,21 @@ void Request::setRespStatus(int rest_status)
 	this->_resp_status = rest_status;
 };
 
-void Request::setBody(char *body, int size)
+void Request::setInputVec(std::vector<char> vec)
 {
-	char body_proper[size];
+	this->_input_vec = vec;
+}
+
+void Request::setBodyPut(std::vector<char> vec)
+{
+	this->_body_put = vec;
+};
+
+void Request::setBody(std::string body)//, int size)
+{
+
+	this->_body = body;
+	/*char body_proper[size];
 	int i = 0;
 	while (i < size)
 	{
@@ -161,24 +184,32 @@ void Request::setBody(char *body, int size)
 	{
 		std::cout << this->_body[i];
 		i++;
-	}
+	}*/
 
 };
 
-void Request::parse_request(char* req)
+void Request::make_put_body(int body_start, std::vector<char> input_vec)
 {
-	//std::cout << "req is: " << req <<  std::endl;
-	std::string first_line;
-	first_line = get_first_line(req);
-	std::cout << first_line << std::endl;
-	first_line_parsing(first_line, this);
-//if (this->_resp_status != 200) return ;
-	//req.erase(0, first_line.length() + 1);
-	req = req + first_line.length() + 1;
+	std::cout << "body start pos :" << input_vec[body_start] << std::endl;
+	input_vec.erase(input_vec.begin(), input_vec.begin() + body_start);
+	if (!input_vec.empty())
+		this->setBodyPut(input_vec);
+}
 
+
+void Request::parse_request(std::string req, std::vector<char> input_vec)//char* req)
+{
+	std::string first_line;
+
+	if (req.find('\n') == 0)
+		req.erase(0, 1);
+	first_line = req.substr(0, req.find("\r\n") + 1);
+	first_line_parsing(first_line, this);
+	if (this->getMethod() == "PUT")
+		make_put_body(req.find("\r\n\r\n") + 4, input_vec);
+	req = req.erase(0, first_line.length() + 1);
 	headers_parsing(req, this);
-	std::cout << "HEADERS" << std::endl;
 	if (this->getRespStatus() == 200)
-		if (this->_body && this->getMethod() == "POST") // in case of PUT request -> check METHOD here
+		if (this->_body != "" && this->getMethod() == "POST") // in case of PUT request -> check METHOD here
 			this->setQuery(this->_body);
 	};

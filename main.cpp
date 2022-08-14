@@ -70,15 +70,18 @@ int vec_search(std::vector<int> sockets, int val)
 	return 0;
 }
 
-std::string make_response(std::string str, ParserConfig config)
+std::string make_response(Iosock *io_ss, ParserConfig config)
 {
 	Request req;
 	Response resp;
 
-	req.parse_request((char *)str.c_str());
+	std::string str = io_ss->get_message();
+
+	req.parse_request(str, io_ss->get_vector());
 	std::cout << "STATUS is " << req.getRespStatus() << std::endl;
 	resp.make_response(config, req);
-	//std::cout << "get resp" << resp.getRespons() << std::endl;
+	std::cout << "can't get resp" << std::endl;
+	std::cout << "get resp" << resp.getRespons() << std::endl;
 	return (resp.getRespons());
 };
 
@@ -116,24 +119,14 @@ int accept_sckt(int fd)
 	return new_sct;
 }
 
-/*bool	work = true;
-
-void	sigHandler(int signum)
-{
-	(void)signum;
-	work = false;
-}*/
-
 int main (int argc, char **argv)
 {
 	int				new_sd = -1;
 	int				compress_array = FALSE;
 	int				close_conn;
-	//char			buffer[3000];
 	int				timeout;
 	struct pollfd	fds[200];
 	int    			nfds = 0, current_size = 0, i, j;
-
 	std::vector<int> listen_ss;
 	std::map<int, Iosock *> io_ss;
 	std::string resp;
@@ -174,12 +167,9 @@ int main (int argc, char **argv)
 				if (fds[i].revents & POLLOUT)
 				{
 					int rc;
-					//while(rc > 0)
-					//{
 
 					rc = send(fds[i].fd, resp.c_str(), resp.length(), 0);
 					std::cout << "sending rc bytes: " << rc << "and len is" << resp.length() << std::endl;
-					//	}
 					if (rc < (int)resp.length())
 						break;
 					fds[i].events = POLLIN;
@@ -213,7 +203,7 @@ int main (int argc, char **argv)
 						if (io_ss[fds[i].fd]->empty_sock() == 0 && \
 							close_conn == FALSE)
 						{
-							resp = make_response(io_ss[fds[i].fd]->get_message(), \
+							resp = make_response(io_ss[fds[i].fd], \
 								config);
 							fds[i].events = POLLOUT;
 							fds[i].revents = POLLOUT;
